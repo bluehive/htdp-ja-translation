@@ -1,0 +1,57 @@
+III Abstraction
+
+▼
+
+How to Design Programs, Second Edition
+
+Preface
+
+Prologue:
+  
+ How to Program
+
+I 
+
+Fixed-
+
+Size Data
+
+Intermezzo 1: Beginning Student Language
+
+II 
+
+Arbitrarily Large Data
+
+Intermezzo 2: Quote, Unquote
+
+III 
+
+Abstraction
+
+Intermezzo 3: Scope and Abstraction
+
+IV 
+
+Intertwined Data
+
+Intermezzo 4: The Nature of Numbers
+
+V 
+
+Generative Recursion
+
+Intermezzo 5: The Cost of Computation
+
+VI 
+
+Accumulators
+
+Epilogue:
+  
+ Moving On
+
+►
+
+III 
+
+Abstraction
