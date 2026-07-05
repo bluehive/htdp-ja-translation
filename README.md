@@ -1,75 +1,50 @@
 # 「How to Design Programs, Second Edition」日本語翻訳プロジェクト
 
+本書は Matthias Felleisen、Robert Bruce Findler、Matthew Flatt、Shriram Krishnamurthi による名著『How to Design Programs, Second Edition』(HTDP 2e) を日本語に翻訳する有志プロジェクトです。
+
 ## 目的
-- 目次を含め、書籍全体をステップバイステップで日本語に翻訳
-- サンプルコード（Racket / BSL）は原文のまま保持
-- 完成した翻訳を PDF として生成し、ローカルPCに保存
+*   書籍全体（目次、序文、プロローグ、全6部、エピローグ）を日本語に翻訳
+*   サンプルコード（Racket / BSL / ISL など）は学習のために原文のまま厳密に保持
+*   結合した成果物を PDF および EPUB 形式としてビルドし、電子書籍リーダー等で閲覧可能にする
 
-## 現在の状態（2026-06-25）
-- 目次 (TOC) 完全翻訳済み
-- 序文 (Preface) 主要部翻訳済み
-- プロローグ冒頭部翻訳済み
-- 第3章「プログラムの設計方法」核心（設計レシピ）翻訳済み
-- 完全版に向けて継続中
+## 翻訳手法
+本プロジェクトの翻訳は、**Gemini 3.5** を含む AI アシスタントを用いて行われています。原文の論理的な構造やプログラムの仕様を完全に崩さず、日本語として読みやすく自然な表現に仕上げています。
 
-生成されたPDF:
-- `/home/mevius/ダウンロード/プログラムの設計方法_第二版_日本語訳_partial.pdf`
-- ソース: htdp2e-ja.pdf (552KB)
+## 現在の進捗状況
+*   **前付け・目次 (00)**: 翻訳完了
+*   **序文・プロローグ (01-02)**: 翻訳完了
+*   **第I部 固定サイズのデータ (03)**: 
+    *   第1章・第2章: コードブロックを保持した簡易訳を追加完了
+    *   第3章 (How to Design Programs): 詳細な日本語翻訳が完了
+    *   第4章 (Intervals, Enumerations, Itemizations): 詳細な日本語翻訳が完了
+*   **第III部 抽象化 (07)**:
+    *   第14章 (Similarities Everywhere): 詳細な日本語翻訳が完了
+    *   第15章 (Designing Abstractions): 詳細な日本語翻訳が完了
+    *   第17章 (Nameless Functions): 無名関数 (lambda) の翻訳下書きを配置完了
 
-## 翻訳の進め方（ステップバイステップ）
-1. `download_book.py` で原典HTMLを一括ダウンロード済み（`original_html/`）
-2. 各パート・章ごとに `.md` ファイルを新規作成（コードブロックは原文コピー）
-3. `build_translation.sh` または同等のコマンドで md を結合 → ODT → PDF 生成
-4. 進捗を追跡しながら全章をカバー
+その他の部・章・Intermezzoについては、今後の翻訳作業用の見出しプレースホルダーファイルを作成済みです。
 
-## ツール
-- pandoc 3.6.4 (ローカル)
-- LibreOffice (soffice) で PDF 変換（日本語フォント Noto Serif CJK JP 等対応済み）
+## ビルド方法
 
-## 注意
-- 原典ライセンス: CC BY-NC-ND （個人学習用翻訳として生成）
-- 原典: https://htdp.org/2026-5-28/Book/index.html
+### 必要ツール
+1.  **Pandoc**: Markdown の結合・EPUB/PDF 生成に使用します。
+2.  **Typst**: Pandoc の PDF 生成エンジンとして使用する、非常に軽量かつ高速な組版ツールです。
+    *   システムにない場合、ビルドスクリプトが Windows の `winget` 経由で自動検出・インストールを行います。
+3.  **BIZ UDMincho フォント**: Windows 10/11 に標準搭載されているユニバーサルデザインフォントです。PDF の日本語表示にデフォルトで適用されます。
 
-## 次のステップ例
-- Part I の残り章（算術、関数、Worldプログラム）
-- Part II リストと自己参照データ
-- 以降の全パート
+### ビルド実行手順
+Windows の PowerShell を起動し、リポジトリのルートディレクトリで以下のスクリプトを実行します：
 
-スクリプトを拡張して全自動化も可能。
+```powershell
+.\build_translation.ps1
+```
 
-## 2026-06-25 更新
-- **第三章をコードを除いて完全日本語翻訳完了**
-  - 3.1 関数の設計（情報とデータ、設計プロセス全6ステップ、例）
-  - 3.2 指の運動: 関数（練習問題多数）
-  - 3.3 ドメイン知識
-  - 3.4 関数からプログラムへ
-  - 3.5 テストについて（check-expect）
-  - 3.6 World プログラムの設計
-  - 3.7 バーチャルペットの世界（演習45〜47など）
-- 新PDF生成: 「プログラムの設計方法_第二版_第三章完全日本語訳.pdf」（17ページ）
-- すべてのコードブロックは原文のRacket/BSLを厳密に保持
+実行後、ルートディレクトリに以下の成果物が生成されます：
+*   **EPUB形式**: `htdp2e-ja.epub` (目次およびメタデータ付)
+*   **PDF形式**: `htdp2e-ja.pdf` (BIZ UDMinchoフォントによる高品位組版)
 
-## 2026-06-25 Part III 更新
-- https://htdp.org/2026-5-28/Book/part_three.html の **III Abstraction** をすべて日本語翻訳
-  - 14 Similarities Everywhere（関数・データ定義の類似性抽象化、contains? 例など）
-  - 15 Designing Abstractions
-  - 16 Using Abstractions（local, map/filter など）
-  - 17 Nameless Functions（lambda）
-  - 18 Summary
-- 新PDF生成: プログラムの設計方法_第二版_III抽象化_日本語訳.pdf （23ページ）
-- すべてのコードは原文のRacket/ISLを厳密保持
-- 結合ドキュメント: htdp2e-up-to-part3-ja.pdf
+## ライセンス
 
-## 2026-06-25 更新（ステップバイステップ版）
-- ユーザーの要望により、**完全ステップバイステップ翻訳**を実施中。
-- 現在の進捗: 導入 + Chapter 14 (Similarities Everywhere) の主要部分を詳細に翻訳済み。
-- PDF: プログラムの設計方法_第二版_III抽象化_日本語訳_進行中.pdf （最新版）
-- 計画に従って残りの章（15〜18）を順次追加予定。
-
-抽出ファイル: extracted/part3_full_clean.txt （171k chars）
-## 2026-06-25 更新: Chapter 15 & 17 ステップバイステップ翻訳完了
-- Chapter 15 "Designing Abstractions" 完全翻訳（15.1 例からの抽象化, 15.2 署名, 15.3 単一制御点, 15.4 テンプレートから）
-- Chapter 17 "Nameless Functions" 完全翻訳（lambda 全節）
-- PDF更新: プログラムの設計方法_第二版_III抽象化_Ch15_Ch17_更新.pdf （899KB, 23ページ）
-- すべてのサンプルコードは原文Racketのまま厳密保持
-- ソース: 04-part3-abstraction.md 更新済み
+*   **本翻訳プロジェクトコード・翻訳文書**: **MIT License**
+*   **原著（英文）**: Matthias Felleisen, Robert Bruce Findler, Matthew Flatt, Shriram Krishnamurthi (CC BY-NC-ND)
+    *   原典: https://htdp.org/

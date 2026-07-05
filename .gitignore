@@ -1,0 +1,9 @@
+# Local build directories
+build/
+extracted/
+
+# Scratch and Python cache
+scratch/
+*.pyc
+__pycache__/
+download_book.py
