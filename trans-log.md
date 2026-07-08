@@ -38,3 +38,17 @@
 - 古い 05-part2-arbitrarily-large-data.md はコメントのみにしている
 
 作業者: Grok (詳細翻訳モード)
+
+## 2026-07-08 の作業内容
+
+### 対象ファイル
+- 05-part2-11.md (Chapter 11: Design by Composition)
+- 05-part2-12.md (Chapter 12: Projects: Lists)
+- 05-part2-13.md (Chapter 13: Summary)
+
+### 作業内容
+- `ch11_raw.md`, `ch12_raw.md`, `ch13_raw.md` に基づき、大幅に省略されていた日本語翻訳ファイルを、省略・要約なしの完全な日本語訳で新規に作成・上書きしました。
+- 各章の Racket コード、シグネチャ、目的ステートメント、および練習問題を漏れなく翻訳しました。
+- `build_translation.ps1` を実行し、`htdp2e-ja.pdf` および `htdp2e-ja.epub` のビルド検証が成功することを確認しました。
+
+作業者: Antigravity (詳細翻訳・ビルド検証モード)
