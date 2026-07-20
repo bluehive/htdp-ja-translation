@@ -1,9 +1,11 @@
 # Local build directories
 build/
-extracted/
+
+# Old scratch extracts (keep original_markdown under extracted/)
+extracted/part3_*.txt
+extracted/*_clean.txt
 
 # Scratch and Python cache
 scratch/
 *.pyc
 __pycache__/
-download_book.py

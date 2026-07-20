@@ -1,5 +1,16 @@
-﻿# Build HTDP 2e Japanese translation to EPUB and PDF using Pandoc.
+# Build HTDP 2e Japanese translation to EPUB and PDF using Pandoc.
 # Runs natively on Windows PowerShell.
+#
+# Translation source of truth (English original for translators):
+#   extracted/original_markdown_**.md
+# Build input (Japanese drafts):
+#   ??-*.md in the repository root (book 00-14, appendices 15-appendix-*, …)
+#
+# Do NOT build from original_markdown_*.md — those are the English originals.
+# Translate from extracted/original_markdown_**.md (and extracted/appendix/…)
+# into the root ??-*.md files, then run this script.
+# Regenerate English extracts:  python extract_to_markdown.py
+# Regenerate appendix extracts: python download_appendix_docs.py ; python extract_appendix_to_markdown.py
 
 $ErrorActionPreference = "Stop"
 
@@ -12,6 +23,24 @@ $BuildDir = Join-Path $PSScriptRoot "build"
 $TempMd = Join-Path $BuildDir "htdp2e-ja-combined.md"
 $OutEpub = Join-Path $PSScriptRoot "htdp2e-ja.epub"
 $OutPdf = Join-Path $PSScriptRoot "htdp2e-ja.pdf"
+$ExtractedDir = Join-Path $PSScriptRoot "extracted"
+
+Write-Host "=== Translation pipeline reminder ===" -ForegroundColor Cyan
+Write-Host "  English original (book):     extracted/original_markdown_**.md"
+Write-Host "  English original (appendix): extracted/appendix/*/original_markdown_**.md"
+Write-Host "  Japanese drafts (build):     ??-*.md"
+Write-Host "  Regenerate book originals:   python extract_to_markdown.py"
+Write-Host "  Regenerate appendix:         python download_appendix_docs.py ; python extract_appendix_to_markdown.py"
+if (Test-Path $ExtractedDir) {
+    $origCount = (Get-ChildItem -Path $ExtractedDir -Filter "original_markdown_*.md" -ErrorAction SilentlyContinue).Count
+    $appendixDir = Join-Path $ExtractedDir "appendix"
+    $appendixCount = 0
+    if (Test-Path $appendixDir) {
+        $appendixCount = (Get-ChildItem -Path $appendixDir -Recurse -Filter "original_markdown_*.md" -ErrorAction SilentlyContinue).Count
+    }
+    Write-Host "  Found $origCount book + $appendixCount appendix original_markdown file(s)" -ForegroundColor DarkGray
+}
+Write-Host ""
 
 # 1. Create build directory
 if (-not (Test-Path $BuildDir)) {
@@ -28,12 +57,15 @@ if (-not (Get-Command "typst" -ErrorAction SilentlyContinue)) {
     }
 }
 
-Write-Host "=== 1. Combining markdown source files ===" -ForegroundColor Green
+Write-Host "=== 1. Combining Japanese translation markdown (??-*.md, book + appendices) ===" -ForegroundColor Green
 $SourceFiles = Get-ChildItem -Path $PSScriptRoot -Filter "??-*.md" | Sort-Object Name
 
 if ($SourceFiles.Count -eq 0) {
-    Write-Error "No source markdown files (??-*.md) found in the root directory!"
+    Write-Error "No source markdown files (??-*.md) found in the root directory! Translate from extracted/original_markdown_**.md (and appendix originals) into ??-*.md first."
 }
+
+$AppendixNamed = @($SourceFiles | Where-Object { $_.Name -like "*appendix*" })
+Write-Host "  Total files: $($SourceFiles.Count) (appendix-named: $($AppendixNamed.Count))" -ForegroundColor DarkGray
 
 # Create empty combined file with UTF-8 encoding (with BOM for Pandoc compatibility on Windows)
 New-Item -ItemType File -Path $TempMd -Force | Out-Null
@@ -47,6 +79,7 @@ foreach ($file in $SourceFiles) {
 }
 
 Write-Host "Combined source written to: $TempMd"
+Write-Host "Note: English originals stay under extracted/; build uses Japanese ??-*.md only." -ForegroundColor DarkGray
 
 # 3. Check if Pandoc is available
 try {
@@ -123,3 +156,4 @@ if (Test-Path $TempMd) {
     Remove-Item $TempMd
 }
 Write-Host "Done." -ForegroundColor Green
+Write-Host "English originals remain in extracted/original_markdown_**.md for translation work." -ForegroundColor Cyan

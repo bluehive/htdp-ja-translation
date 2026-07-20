@@ -1,0 +1,58 @@
+<!-- Appendix manual: gui -->
+<!-- Source URL path: /gui/mredprefs.html -->
+<!-- Canonical English source for Japanese appendix translation -->
+
+<!-- Extracted from appendix_original_html/gui/mredprefs.html -->
+<!-- Canonical English source for Japanese translation -->
+
+## 10 Preferences
+
+The racket/gui/base library supports a number of preferences for global configuration. The
+preferences are stored in the common file reported by
+find-system-path for 'pref-file, and
+preference values can be retrieved and changed through
+get-preference and put-preferences. Except for the except the
+'GRacket:playcmd
+preference preference, the racket/gui/base library
+reads each of the preferences below once at startup.
+
+*Beware:* The preferences file is read in case-insensitive mode (for
+historical reasons), so the symbols listed below must be surrounded with
+|.
+
+The following are the preference names used by GRacket:
+
+- 'GRacket:default-font-size
+preference — sets the default font size
+the basic style in a style list, and thus the default font size for
+an editor.
+- 'GRacket:defaultMenuPrefix
+preference — sets the prefix used by
+default for menu item shortcuts on Unix, one of 'ctl,
+'meta, or 'alt. The default is
+'ctl. When this preference is set to 'meta or
+'alt, underlined mnemonics (introduced by & in menu
+labels) are suppressed.
+- 'GRacket:emacs-undo
+preference — a true value makes undo in
+editors by default preserve all editing history, including operations
+that are undone (as in Emacs); the set-undo-preserves-all-history in editor<%> method changes a specific editor’s
+configuration.
+- 'GRacket:wheelStep
+preference — sets the default mouse-wheel step
+size of editor-canvas% objects.
+- 'GRacket:outline-inactive-selection
+preference — a true value
+causes selections in text editors to be shown with an outline of the
+selected region when the editor does no have the keyboard focus.
+- 'GRacket:playcmd
+preference — used to format a sound-playing
+command; see play-sound for details.
+- 'GRacket:doubleClickTime
+preference — overrides the
+platform-specific default interval (in milliseconds) for double-click
+events.
+
+In each of the above cases, if no preference value is found using the
+GRacket-prefixed name, a MrEd-prefixed
+name is tried for backward compatibility.

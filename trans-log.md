@@ -1,5 +1,112 @@
 # HTDP 日本語翻訳 作業ログ
 
+## 2026-07-20 付録 quick / htdp-langs 翻訳・ビルド・公開準備
+
+### 実施内容
+- 付録 A: `15-appendix-quick.md` — Quick チュートリアルをステップバイステップで全文翻訳（コード・画像プレースホルダ保持）
+- 付録 B: `16`〜`21-appendix-htdp-langs-*.md` — htdp-langs 全6ページを翻訳
+  - コードフェンス数は原本と一致を確認（例: beginner 220 ```racket）
+  - 定義ボックスラベルは [手続き]/[値]/[構文] 等へ
+  - ツール: `tools/translate_htdp_langs_appendix.py`（再生成可）
+- 原本パイプライン: `download_appendix_docs.py` / `extract_appendix_to_markdown.py` / `extract_to_markdown.py`
+- ビルド: `build_translation.sh` / `.ps1` が `??-*.md`（付録 15–21 含む）を結合
+- 成果物: `htdp2e-ja.epub` / `htdp2e-ja.pdf` 再生成済み
+
+### 注意（レビュー向け）
+- htdp-langs の一部長い説明文は機械支援訳のため、文体が粗い箇所が残る可能性あり（要人手校正）
+- `15-appendix-quick.md` は手訳で品質高め
+
+作業者: Grok
+
+---
+
+## 2026-07-20（続き）付録 Racket ドキュメント原本
+
+### 対象 URL（シード／目次）
+- https://docs.racket-lang.org/quick/index.html
+- https://docs.racket-lang.org/htdp-langs/index.html
+- https://docs.racket-lang.org/racket-cheat/index.html
+- https://docs.racket-lang.org/gui/index.html
+
+### 実施内容
+- 同一マニュアルディレクトリ内の HTML を再帰的にダウンロード → `appendix_original_html/<manual>/`
+- Scribble HTML から文面・コード・定義ボックス・図式を抽出 → `extracted/appendix/<manual>/original_markdown_**.md`
+- 定義ボックス（procedure/value/syntax 等）はアスキー枠で表現
+- スクリプト:
+  - `download_appendix_docs.py`
+  - `extract_appendix_to_markdown.py`（`extract_to_markdown.Converter` を再利用）
+
+### 取得ページ数
+| マニュアル | HTML ページ数 | 翻訳原本 Markdown |
+|-----------|---------------|-------------------|
+| quick | 1 | `extracted/appendix/quick/` |
+| htdp-langs | 6 | `extracted/appendix/htdp-langs/` |
+| racket-cheat | 1 | `extracted/appendix/racket-cheat/` |
+| gui | 100 | `extracted/appendix/gui/` |
+| **合計** | **108** | 108 本の `original_markdown_**.md` |
+
+### 翻訳方針（付録）
+- **付録の翻訳正本**: `extracted/appendix/<manual>/original_markdown_**.md`
+- HTML を直接翻訳入力にしない（本体と同じ）
+- API 名・シグネチャ・コードは原文維持
+- 説明文のみ日本語化（将来の付録日本語ドラフト用）
+
+### ドキュメント更新
+- `README.md` … 付録パイプラインを追記
+- `extracted/README.md` / `extracted/appendix/README.md` / 各 manual README
+
+作業者: Grok (付録原本ダウンロード・抽出)
+
+---
+
+## 2026-07-20 の作業内容
+
+### 原本パイプラインの確立
+- `original_html/` から文面・Racket コード・図式を抽出し、`extracted/original_markdown_**.md` として保存した。
+- 図式はアスキーアート（枠線付きテキスト／表／コード）で表現。
+- 再生成用スクリプト: `extract_to_markdown.py`
+- 対応表: `extracted/README.md`
+
+### 翻訳原本の方針（今後の厳守事項）
+- **翻訳の正本（English source of truth）**: `extracted/original_markdown_**.md`
+- HTML（`original_html/`）を直接の翻訳入力にしない。
+- 日本語訳はルートの `??-*.md` に書く。
+- ビルド（`build_translation.sh` / `build_translation.ps1`）は **日本語訳 `??-*.md` のみ** を結合して EPUB/PDF を生成する。
+- コードは原文と完全同一を維持する。
+
+### 生成された原本ファイル（15本）
+| # | ファイル |
+|---|----------|
+| 00 | `original_markdown_00_index.md` |
+| 01 | `original_markdown_01_part_preface.md` |
+| 02 | `original_markdown_02_part_prologue.md` |
+| 03 | `original_markdown_03_part_one.md` |
+| 04 | `original_markdown_04_i1-2.md` |
+| 05 | `original_markdown_05_part_two.md` |
+| 06 | `original_markdown_06_i2-3.md` |
+| 07 | `original_markdown_07_part_three.md` |
+| 08 | `original_markdown_08_i3-4.md` |
+| 09 | `original_markdown_09_part_four.md` |
+| 10 | `original_markdown_10_i4-5.md` |
+| 11 | `original_markdown_11_part_five.md` |
+| 12 | `original_markdown_12_i5-6.md` |
+| 13 | `original_markdown_13_part_six.md` |
+| 14 | `original_markdown_14_part_epilogue.md` |
+
+### ドキュメント・ビルド更新
+- `README.md`: 原本パスと翻訳ワークフローを明記
+- `build_translation.sh`: ルート相対パス化、全 `??-*.md` 結合、原本リマインダ、EPUB/PDF
+- `build_translation.ps1`: 同様に原本リマインダとコメントを追加
+
+### 次回への引継ぎ
+- 未訳・部分訳の章は、対応する `extracted/original_markdown_**.md` を開いて `??-*.md` を更新する。
+- 例: 第I部 → `original_markdown_03_part_one.md` → `03-part1-fixed-size-data.md`
+- 例: Intermezzo 2 → `original_markdown_06_i2-3.md` → `06-intermezzo2.md`
+
+作業者: Grok (原本抽出・パイプライン整備)
+
+---
+
 ## 2026-07-07 の作業内容
 
 ### 対象ファイル
