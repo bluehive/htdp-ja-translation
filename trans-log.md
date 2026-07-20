@@ -186,3 +186,23 @@
 - コピー先: `/home/mevius/GoogleDrive/`
 
 作業者: Grok (git-worktree-experimental / experimental/20260721-feat)
+
+---
+
+## 2026-07-21 Advanced Student（htdp-langs §5）再翻訳
+
+### 対象
+- 原本: `extracted/appendix/htdp-langs/original_markdown_05_advanced.md`
+- 出力: `21-appendix-htdp-langs-05-advanced.md`（全面差し替え）
+
+### 実施
+- 機械訳の単語サラダを排除し、新潮社校正水準の日本語へ再翻訳
+- コード・シグネチャ・```racket・文法表は原文維持
+- ラベル: [procedure]→[手続き] 等（件数 EN=JA: 手続き267 / 構文51 / 値20）
+- フェンス: ``` 1290 = 1290、```racket 305 = 305
+
+### ビルド・配布
+- `./build_translation.sh` → epub/pdf
+- コピー: `/home/mevius/GoogleDrive/`
+
+作業者: Grok (worktree experimental/20260721-feat)
