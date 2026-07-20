@@ -61,7 +61,7 @@ extracted/appendix/<manual>/original_markdown_**.md
 * **付録 A Quick (15)**: 翻訳あり
 * **付録 B htdp-langs (16–21)**: 翻訳あり（機械支援ドラフト箇所あり）
 * **付録 C racket-cheat (22)**: 翻訳あり
-* **付録 D gui (23–46)**: 翻訳あり（概要 00–15 + クラス参照 16–99）
+* **付録 D gui (23–46)**: 翻訳あり（概要 00–15 は校正済み寄り。クラス参照 39–46 は機械支援ドラフト）
 
 その他の部・章・Intermezzoは、`extracted/original_markdown_**.md` を原本として順次翻訳する。
 
