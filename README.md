@@ -58,6 +58,10 @@ extracted/appendix/<manual>/original_markdown_**.md
 * **第I部 固定サイズのデータ (03)**: 一部〜詳細訳あり
 * **第II部 (05-part2-*)**: 第8〜13章の翻訳あり
 * **第III部 抽象化 (07)**: 一部章の翻訳あり
+* **付録 A Quick (15)**: 翻訳あり
+* **付録 B htdp-langs (16–21)**: 翻訳あり（機械支援ドラフト箇所あり）
+* **付録 C racket-cheat (22)**: 翻訳あり
+* **付録 D gui (23–46)**: 翻訳あり（概要 00–15 + クラス参照 16–99）
 
 その他の部・章・Intermezzoは、`extracted/original_markdown_**.md` を原本として順次翻訳する。
 

@@ -159,3 +159,30 @@
 - `build_translation.ps1` を実行し、`htdp2e-ja.pdf` および `htdp2e-ja.epub` のビルド検証が成功することを確認しました。
 
 作業者: Antigravity (詳細翻訳・ビルド検証モード)
+---
+
+## 2026-07-21 付録 racket-cheat / gui 翻訳
+
+### 対象
+- `extracted/appendix/racket-cheat/`（1 ページ）
+- `extracted/appendix/gui/`（100 ページ: 00–15 概要 + 16–99 クラス参照）
+
+### 日本語出力（ルート `??-*.md`）
+| ファイル | 内容 |
+|---------|------|
+| `22-appendix-racket-cheat.md` | 付録 C: Racket 早見表 |
+| `23`–`38-appendix-gui-*.md` | 付録 D: GUI 概要・一覧（00–15） |
+| `39`–`46-appendix-gui-classes-*.md` | 付録 D: クラス参照（16–99、約10本ずつ結合） |
+
+### 方針
+- コード・識別子・シグネチャは原文維持
+- 図・表はアスキー。`[image:…]` は保持し、文脈に応じた ASCII スケッチを追加
+- 長文は適宜分割して自然な日本語へ
+- 再帰3層（index → 概要 → クラス）を全訳（省略なし）
+- 進捗ログ: `appendix-translation-progress.md`
+
+### ビルド・配布
+- `./build_translation.sh` → `htdp2e-ja.epub` / `htdp2e-ja.pdf`
+- コピー先: `/home/mevius/GoogleDrive/`
+
+作業者: Grok (git-worktree-experimental / experimental/20260721-feat)
