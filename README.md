@@ -86,8 +86,9 @@ build_translation.sh / .ps1
 
 ### 必要ツール
 1. **Pandoc**: Markdown の結合・EPUB/PDF 生成
-2. **PDF エンジン**: Linux では Typst または XeLaTeX / LibreOffice 経由など。Windows では Typst（`build_translation.ps1` 既定）
-3. **日本語フォント**: 例) Noto Serif CJK JP（Linux）、BIZ UDMincho（Windows）
+2. **PDF エンジン**: **Typst 推奨**（`build_translation.sh` が優先）。未導入時は XeLaTeX → LibreOffice の順。Windows は `build_translation.ps1` 既定が Typst。
+   - Typst 時の設定（min-exp-small 相当）: `mainfont=Noto Serif CJK JP` / `monofont=Noto Sans Mono CJK JP` / 左右余白 0.75in — 幅広 ASCII 文法表の折り返し崩れを抑制
+3. **日本語フォント**: 本文 Noto Serif CJK JP、コード用 Noto Sans Mono CJK JP（Linux）。Windows は環境に合わせて `mainfont` / monofont を調整
 
 ### ビルド実行
 

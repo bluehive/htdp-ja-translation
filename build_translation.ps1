@@ -116,6 +116,9 @@ if (Test-Path $OutEpub) {
 
 # 5. Generate PDF
 Write-Host "=== 3. Generating PDF file ===" -ForegroundColor Green
+# Typst-oriented flags (aligned with min-exp-small): monofont + 0.75in side margins
+# keep wide ASCII grammar tables from soft-wrapping in PDF.
+$MonoFontName = if ($env:HTDP_MONOFONT) { $env:HTDP_MONOFONT } else { "Noto Sans Mono CJK JP" }
 $PdfArgs = @(
     $TempMd,
     "-o",
@@ -127,7 +130,17 @@ $PdfArgs = @(
     "-V",
     "mainfont=$FontName",
     "-V",
-    "geometry:margin=1in",
+    "monofont=$MonoFontName",
+    "-V",
+    "fontsize=10pt",
+    "-V",
+    "margin-left=0.75in",
+    "-V",
+    "margin-right=0.75in",
+    "-V",
+    "margin-top=1in",
+    "-V",
+    "margin-bottom=1in",
     "--metadata",
     "title=プログラムの設計方法 第二版（日本語訳）",
     "--metadata",

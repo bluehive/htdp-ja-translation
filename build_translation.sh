@@ -12,6 +12,9 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 cd "$ROOT"
 
+# Prefer user-local tools (e.g. typst installed under ~/.local/bin)
+export PATH="${HOME}/.local/bin:${PATH}"
+
 if [[ -x "/home/mevius/my-project/mypublish-books/tools/pandoc-3.6.4/bin/pandoc" ]]; then
   PANDOC="/home/mevius/my-project/mypublish-books/tools/pandoc-3.6.4/bin/pandoc"
 elif command -v pandoc >/dev/null 2>&1; then
@@ -80,18 +83,32 @@ else
 fi
 
 echo "=== 3. Generating PDF ==="
+# Typst path (preferred): tuned like min-exp-small experiment so ~89-col
+# ASCII grammar tables keep a single border line (no soft-wrap collapse).
+#   mainfont  = body Japanese
+#   monofont  = fixed-pitch for fenced code / ASCII boxes
+#   fontsize  = 10pt body; code inherits smaller mono in pandoc/typst default
+#   margins   = 0.75in L/R (wider text measure than 1in)
 PDF_OK=0
 if command -v typst >/dev/null 2>&1; then
+  echo "  PDF engine: typst ($(typst --version 2>/dev/null | head -n1))"
   if "$PANDOC" "$TEMP_MD" \
       -o "$OUT_PDF" \
       --toc --toc-depth=3 \
       --pdf-engine=typst \
       -V mainfont="Noto Serif CJK JP" \
-      -V geometry:margin=1in \
+      -V monofont="Noto Sans Mono CJK JP" \
+      -V fontsize=10pt \
+      -V margin-left=0.75in \
+      -V margin-right=0.75in \
+      -V margin-top=1in \
+      -V margin-bottom=1in \
       --metadata title="プログラムの設計方法 第二版（日本語訳）" \
       --metadata author="Matthias Felleisen, Robert Bruce Findler, Matthew Flatt, Shriram Krishnamurthi" \
       --metadata language=ja; then
     PDF_OK=1
+  else
+    echo "  WARNING: typst PDF failed; trying next engine..." >&2
   fi
 fi
 

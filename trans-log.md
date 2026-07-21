@@ -206,3 +206,22 @@
 - コピー: `/home/mevius/GoogleDrive/`
 
 作業者: Grok (worktree experimental/20260721-feat)
+
+---
+
+## 2026-07-21 PDF: Typst min-exp-small 設定を本番化
+
+### 背景
+ASCII 文法表（約89桁）が LibreOffice PDF で soft-wrap し枠が崩れていた。
+
+### 変更
+- `build_translation.sh` / `build_translation.ps1`: Typst 経路に min-exp-small 相当フラグ
+  - `monofont=Noto Sans Mono CJK JP`
+  - `fontsize=10pt`
+  - 左右 margin 0.75in
+  - `PATH` に `~/.local/bin`（typst）を追加
+- 全文ビルド: Typst 0.15.1、約 115 秒、PDF ~12MB / 917 pages
+- 検証: Advanced 冒頭文法表の `+---` が 89 桁一体（WRAP_BREAK_SYMPTOM=False）
+- Drive へ再コピー
+
+作業者: Grok (experimental/20260721-feat)
