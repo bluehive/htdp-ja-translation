@@ -35,13 +35,42 @@ extracted/appendix/<manual>/original_markdown_**.md
 * 翻訳するときは **HTML を直接読まず**、`original_markdown_**.md` をソースにする。
 * コードブロックは原文と完全一致を保つ。
 * 図式・定義ボックスは原本側でアスキーアート化済み。翻訳では枠内の説明文のみ訳し、構造は維持する。
-* **画像 PNG**（`[image: pict_….png]` 等）はビルド時に公式サイトから取得して埋め込む（Issue #9）。詳細は `figures-policy.md`。
-* 本体の再生成: `python3 extract_to_markdown.py`
-* 付録の再取得: `python3 download_appendix_docs.py`（目次リンクを同一マニュアル内で再帰）
-* 付録の再抽出: `python3 extract_appendix_to_markdown.py`
-* 画像取得: `python3 tools/htdp_figures.py fetch`（`assets/htdp-figures/` は git 管理外）
-* 画像棚卸し: `python3 tools/htdp_figures.py report`
 * 対応表: `extracted/README.md` および `extracted/appendix/README.md`
+
+### よく使うコマンド
+
+```bash
+# 英語原本の再生成
+python3 extract_to_markdown.py
+python3 download_appendix_docs.py && python3 extract_appendix_to_markdown.py
+
+# 図・画像（Issue #9）— 詳細は figures-policy.md
+python3 tools/htdp_figures.py fetch          # PNG 取得（git 外）
+python3 tools/htdp_figures.py report         # 棚卸し
+python3 tools/htdp_figures.py gate --mode report   # report|warn|error
+./build_translation.sh                       # EPUB/PDF（内部で expand）
+```
+
+### 図表・画像（Issue #9）— 要点
+
+| 項目 | 内容 |
+|------|------|
+| 問題 | `[image: pict_….png]` だけ残り、数式・グラフが見えない |
+| 方針 | 公式 PNG を **自動取得**してビルド時に埋め込む（人手キャプションは例外のみ） |
+| 置き場 | `assets/htdp-figures/`（**gitignore**。クローン後に `fetch`） |
+| ドラフト | ルート `??-*.md` は `[image: …]` のまま（SoT） |
+| 版 URL | `HTDP_BOOK_BASE` で上書き可（既定: `https://htdp.org/2026-5-28/Book/`） |
+| ゲート | `FIGURES_GATE=report\|warn\|error`（既定 report。ビルドを止めない） |
+| ポリシー全文 | [`figures-policy.md`](figures-policy.md) |
+
+```bash
+# 例: 画像版パスを変える
+export HTDP_BOOK_BASE=https://htdp.org/2026-5-28/Book/
+# 例: 欠けたらビルド失敗にしたいときだけ
+FIGURES_GATE=error ./build_translation.sh
+# 例: 再ダウンロードを飛ばす
+SKIP_FIGURE_FETCH=1 ./build_translation.sh
+```
 
 #### 付録マニュアル一覧
 

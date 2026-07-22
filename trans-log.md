@@ -1,5 +1,39 @@
 # HTDP 日本語翻訳 作業ログ
 
+## 2026-07-22 次フェーズ（Issue #9 承認チェックリスト実行）
+
+### オーナー承認（チェックリスト要約）
+
+- A1 コピー先: `~/googledrive/` → 実体 `~/GoogleDrive/`
+- A2 push / A3 PR **ready** → master
+- B1 README 整理 / B2 trans-log 引き継ぎ
+- C1 URL 設定化 / C2 ゲート / C3 図86・87 分割（直せる範囲）
+- D SE 確認を Issue + PR に記載
+
+### 実施リスト
+
+1. [x] 承認受領コメントを Issue #9 に投稿
+2. [x] C1: `HTDP_BOOK_BASE` 等で base URL 設定化（`htdp_figures.py` / `download_book.py`）
+3. [x] C2: `gate --mode report|warn|error` と `FIGURES_GATE`（build 連携）
+4. [x] C3: `07-part3-abstraction.md` 図86・87 を左右二重 fence 化 + 調査メモ
+5. [x] B1/B2: README・figures-policy・本ログの引き継ぎ
+6. [x] A1: PDF/EPUB を GoogleDrive へコピー
+7. [x] D: SE 観点チェック → Issue / PR
+8. [x] A2/A3: push + ready PR
+
+### 引き継ぎチェックリスト（次作業者）
+
+- [ ] クローン後 `python3 tools/htdp_figures.py fetch`（assets は git に無い）
+- [ ] `python3 tools/htdp_figures.py gate --mode report` で missing 0 を確認
+- [ ] `./build_translation.sh` で EPUB/PDF 再生成
+- [ ] 代表画像（pict_237 / pict_240）を PDF または EPUB で目視
+- [ ] 図86・87 以外の崩れた ASCII 対比が残っていないか、必要なら同様に分割
+- [ ] 抽出器 `figure_to_ascii` の本格修正は別 Issue / 別 PR 推奨
+- [ ] `FIGURES_GATE=error` は CI 導入時のみ（ローカル開発の既定は report）
+- [ ] master へは **PR 経由**のみ（直 push 禁止方針）
+
+---
+
 ## 2026-07-22 図表パイプライン p0（Issue #9 / experimental/20260722-figures）
 
 ### 方針（ユーザー承認済み）

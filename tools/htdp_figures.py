@@ -17,6 +17,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import os
 import re
 import sys
 import time
@@ -31,15 +32,46 @@ BUILD = ROOT / "build"
 HTML_BOOK = ROOT / "original_html"
 HTML_APPENDIX = ROOT / "appendix_original_html"
 
-# Prefer the edition already used by download_book.py
-BOOK_BASE = "https://htdp.org/2026-5-28/Book/"
-SOURCE_BASES: dict[str, str] = {
-    "book": BOOK_BASE,
-    "quick": "https://docs.racket-lang.org/quick/",
-    "htdp-langs": "https://docs.racket-lang.org/htdp-langs/",
-    "racket-cheat": "https://docs.racket-lang.org/racket-cheat/",
-    "gui": "https://docs.racket-lang.org/gui/",
-}
+# Book edition path is versioned (e.g. 2026-5-28). Override without code edit:
+#   export HTDP_BOOK_BASE=https://htdp.org/YYYY-M-D/Book/
+# Optional per-manual overrides: HTDP_FIGURES_BASE_QUICK, _HTDP_LANGS, _GUI, _RACKET_CHEAT
+_DEFAULT_BOOK_BASE = "https://htdp.org/2026-5-28/Book/"
+
+
+def load_source_bases() -> dict[str, str]:
+    """Resolve download base URLs (env overrides > defaults)."""
+    book = (
+        os.environ.get("HTDP_BOOK_BASE")
+        or os.environ.get("HTDP_FIGURES_BOOK_BASE")
+        or _DEFAULT_BOOK_BASE
+    ).rstrip("/") + "/"
+    return {
+        "book": book,
+        "quick": (
+            os.environ.get("HTDP_FIGURES_BASE_QUICK")
+            or "https://docs.racket-lang.org/quick/"
+        ).rstrip("/")
+        + "/",
+        "htdp-langs": (
+            os.environ.get("HTDP_FIGURES_BASE_HTDP_LANGS")
+            or "https://docs.racket-lang.org/htdp-langs/"
+        ).rstrip("/")
+        + "/",
+        "racket-cheat": (
+            os.environ.get("HTDP_FIGURES_BASE_RACKET_CHEAT")
+            or "https://docs.racket-lang.org/racket-cheat/"
+        ).rstrip("/")
+        + "/",
+        "gui": (
+            os.environ.get("HTDP_FIGURES_BASE_GUI")
+            or "https://docs.racket-lang.org/gui/"
+        ).rstrip("/")
+        + "/",
+    }
+
+
+SOURCE_BASES: dict[str, str] = load_source_bases()
+BOOK_BASE = SOURCE_BASES["book"]
 
 # `[image: pict_240.png]` or `[image:pict_240.png]` or with alt after em dash
 PLACEHOLDER_RE = re.compile(
@@ -394,29 +426,38 @@ def cmd_expand_tree(args: argparse.Namespace) -> int:
     return 0
 
 
-def cmd_report(args: argparse.Namespace) -> int:
+def inventory_stats() -> tuple[dict[tuple[str, str], list[str]], int, int, int, list[str]]:
+    """needed, present, missing, bare_count, missing_keys."""
     needed = collect_needed_from_markdown()
     present = missing = 0
-    rows: list[str] = []
-    for (source, filename), refs in sorted(needed.items()):
+    missing_keys: list[str] = []
+    for (source, filename), _refs in sorted(needed.items()):
         p = asset_path(source, filename)
         if p.exists() and p.stat().st_size > 0:
             present += 1
-            status = "ok"
         else:
             missing += 1
-            status = "MISSING"
+            missing_keys.append(f"{source}/{filename}")
+    bare = 0
+    for md in ROOT.glob("??-*.md"):
+        bare += len(PLACEHOLDER_RE.findall(md.read_text(encoding="utf-8")))
+    return needed, present, missing, bare, missing_keys
+
+
+def cmd_report(args: argparse.Namespace) -> int:
+    needed, present, missing, bare, _missing_keys = inventory_stats()
+    rows: list[str] = []
+    for (source, filename), refs in sorted(needed.items()):
+        p = asset_path(source, filename)
+        status = "ok" if p.exists() and p.stat().st_size > 0 else "MISSING"
         rows.append(
             f"| `{source}/{filename}` | {status} | {len(set(refs))} | {', '.join(sorted(set(refs))[:3])} |"
         )
 
-    bare = 0
-    for md in ROOT.glob("??-*.md"):
-        bare += len(PLACEHOLDER_RE.findall(md.read_text(encoding="utf-8")))
-
     lines = [
-        "# HtDP figures inventory (report-only gate)",
+        "# HtDP figures inventory",
         "",
+        f"- book base URL: `{SOURCE_BASES['book']}`",
         f"- placeholder occurrences in drafts: **{bare}**",
         f"- unique (source, file) pairs: **{len(needed)}**",
         f"- present on disk: **{present}**",
@@ -431,9 +472,51 @@ def cmd_report(args: argparse.Namespace) -> int:
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(f"Inventory -> {out} (present={present}, missing={missing}, bare_placeholders={bare})")
+    print(f"  BOOK_BASE={SOURCE_BASES['book']}")
     if args.fail_on_missing and missing:
         return 2
     return 0
+
+
+def cmd_gate(args: argparse.Namespace) -> int:
+    """
+    Staged quality gate for missing figure assets.
+
+    Modes (FIGURES_GATE or --mode):
+      report — always exit 0; write inventory (default)
+      warn   — exit 0; print warnings if missing > 0
+      error  — exit 2 if any referenced asset is missing
+    """
+    mode = (args.mode or os.environ.get("FIGURES_GATE") or "report").strip().lower()
+    if mode not in {"report", "warn", "error"}:
+        print(f"ERROR: unknown gate mode {mode!r} (use report|warn|error)", file=sys.stderr)
+        return 2
+
+    # reuse report writer
+    rc = cmd_report(argparse.Namespace(out=args.out or "", fail_on_missing=False))
+    _needed, present, missing, bare, missing_keys = inventory_stats()
+    print(f"Gate mode={mode}: present={present} missing={missing} bare_placeholders={bare}")
+
+    if missing == 0:
+        print("Gate: OK (no missing figure assets)")
+        return rc
+
+    msg = f"Gate: {missing} missing figure asset(s)"
+    if mode == "report":
+        print(msg + " (report only; not failing)")
+        for k in missing_keys[:15]:
+            print(f"  - {k}")
+        return 0
+    if mode == "warn":
+        print("WARNING: " + msg, file=sys.stderr)
+        for k in missing_keys[:15]:
+            print(f"  - {k}", file=sys.stderr)
+        return 0
+    # error
+    print("ERROR: " + msg, file=sys.stderr)
+    for k in missing_keys[:30]:
+        print(f"  - {k}", file=sys.stderr)
+    return 2
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -463,6 +546,18 @@ def build_parser() -> argparse.ArgumentParser:
     r.add_argument("--out", default="")
     r.add_argument("--fail-on-missing", action="store_true")
     r.set_defaults(func=cmd_report)
+
+    g = sub.add_parser(
+        "gate",
+        help="Staged gate: report|warn|error on missing assets (env FIGURES_GATE)",
+    )
+    g.add_argument(
+        "--mode",
+        default="",
+        help="report (default) | warn | error; overrides FIGURES_GATE",
+    )
+    g.add_argument("--out", default="", help="Inventory markdown path")
+    g.set_defaults(func=cmd_gate)
 
     return p
 

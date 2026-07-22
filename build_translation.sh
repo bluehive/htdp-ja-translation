@@ -37,9 +37,15 @@ OUT_EPUB="$ROOT/htdp2e-ja.epub"
 OUT_PDF="$ROOT/htdp2e-ja.pdf"
 FIGURES_PY="$ROOT/tools/htdp_figures.py"
 
-# SKIP_FIGURE_FETCH=1 to skip network; FAIL_ON_MISSING_FIGURES=1 to hard-fail inventory
+# SKIP_FIGURE_FETCH=1 to skip network
+# FIGURES_GATE=report|warn|error (default report). Legacy: FAIL_ON_MISSING_FIGURES=1 => error
 SKIP_FIGURE_FETCH="${SKIP_FIGURE_FETCH:-0}"
-FAIL_ON_MISSING_FIGURES="${FAIL_ON_MISSING_FIGURES:-0}"
+if [[ -n "${FAIL_ON_MISSING_FIGURES:-}" && "${FAIL_ON_MISSING_FIGURES}" == "1" ]]; then
+  FIGURES_GATE="${FIGURES_GATE:-error}"
+else
+  FIGURES_GATE="${FIGURES_GATE:-report}"
+fi
+export FIGURES_GATE
 
 echo "=== Translation pipeline reminder ==="
 echo "  English original (book):     extracted/original_markdown_**.md"
@@ -75,10 +81,10 @@ if [[ -f "$FIGURES_PY" ]]; then
   else
     echo "  SKIP_FIGURE_FETCH=1 — not downloading."
   fi
-  if [[ "$FAIL_ON_MISSING_FIGURES" == "1" ]]; then
-    python3 "$FIGURES_PY" report --fail-on-missing
-  else
-    python3 "$FIGURES_PY" report || true
+  echo "  Figures gate mode: $FIGURES_GATE"
+  if ! python3 "$FIGURES_PY" gate --mode "$FIGURES_GATE"; then
+    echo "ERROR: figures gate failed (FIGURES_GATE=$FIGURES_GATE)." >&2
+    exit 1
   fi
   echo "  Expanding [image:…] placeholders -> $EXPANDED_DIR"
   python3 "$FIGURES_PY" expand-tree --out-dir "$EXPANDED_DIR"

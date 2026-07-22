@@ -54,38 +54,39 @@
 
 設計レシピは関数の基本的な組織を決める。テンプレートが、関数の目的とは無関係にデータ定義から作られるからである。だから、同じ種類のデータを消費する関数が似て見えるのも驚くにはあたらない。
 
+> **図86: Two similar functions（左右対比）**  
+> 左: `"dog"` を探す / 右: `"cat"` を探す。本文どおり唯一の差分は比較文字列。
+
+**左（contains-dog?）**
+
+```racket
+; Los -> Boolean
+; does l contain "dog"
+(define (contains-dog? l)
+  (cond
+    [(empty? l) #false]
+    [else
+     (or
+      (string=? (first l)
+                "dog")
+      (contains-dog?
+       (rest l)))]))
 ```
-+--------------------------------------------------------------------------------+
-| Figure 86: Two similar functions                                               |
-|                                                                                |
-| +--------------------------------------+--+----------------------------------- |
-| |; Los -> Boolean ⏎; does l contain… | |; Los -> Boolean ⏎; does l         |
-| contain… |                                                                     |
-| +--------------------------------------+--+----------------------------------- |
-| |;Los ->Boolean | | |                                                         |
-| |;doesl contain"dog" | | |                                                    |
-| | (define (contains-dog? l) | | |                                              |
-| | (cond | | |                                                                  |
-| | [(empty? l) #false] | | |                                                    |
-| | [else | | |                                                                  |
-| | (or | | |                                                                    |
-| | (string=? (first l) | | |                                                    |
-| | "dog") | | |                                                                 |
-| | (contains-dog? | | |                                                         |
-| | (rest l)))])) | | |                                                          |
-| |;Los ->Boolean | | |                                                         |
-| |;doesl contain"cat" | | |                                                    |
-| | (define (contains-cat? l) | | |                                              |
-| | (cond | | |                                                                  |
-| | [(empty? l) #false] | | |                                                    |
-| | [else | | |                                                                  |
-| | (or | | |                                                                    |
-| | (string=? (first l) | | |                                                    |
-| | "cat") | | |                                                                 |
-| | (contains-cat? | | |                                                         |
-| | (rest l)))])) | | |                                                          |
-| +--------------------------------------+--+----------------------------------- |
-+--------------------------------------------------------------------------------+
+
+**右（contains-cat?）**
+
+```racket
+; Los -> Boolean
+; does l contain "cat"
+(define (contains-cat? l)
+  (cond
+    [(empty? l) #false]
+    [else
+     (or
+      (string=? (first l)
+                "cat")
+      (contains-cat?
+       (rest l)))]))
 ```
 
 図86の2つの関数を考えてみよう。どちらも文字列のリストを消費し、特定の文字列を探す。左側の関数は `"dog"` を、右側は `"cat"` を探す。2つの関数はほとんど見分けがつかない。どちらも文字列のリストを消費し、どちらも関数本体は2つの節からなる `cond` 式である。どちらも入力が `'()` なら `#false` を生成し、どちらも `or` 式を使って先頭の要素が目的の要素かどうかを判定し、そうでなければ再帰を使ってリストの残りを探す。唯一の違いは、入れ子の `cond` 式での比較に使う文字列である。`contains-dog?` は `"dog"` を使い、`contains-cat?` は `"cat"` を使う。違いを強調するため、2つの文字列は網掛けされている。
@@ -104,24 +105,25 @@
 
 いま `contains-dog?` のような関数が本当に必要なら、1行の関数として定義でき、`contains-cat?` についても同じことが言える。図87はまさにそれを行い、図86とざっと見比べて、どうやってあちらからこちらへ至るかを確認すべきである。何よりよいのは、`contains?` があれば、文字列のリストの中で*任意の*文字列を探すことがいまや自明になり、`contains-dog?` のような特化した関数を再び定義する必要は二度とない、という点である。
 
+> **図87: Two similar functions, revisited（左右対比）**  
+> 図86と同じ対比を、共通の `contains?` への1行委譲で書き直したもの。
+
+**左（contains-dog?）**
+
+```racket
+; Los -> Boolean
+; does l contain "dog"
+(define (contains-dog? l)
+  (contains? "dog" l))
 ```
-+--------------------------------------------------------------------------------+
-| Figure 87: Two similar functions, revisited                                    |
-|                                                                                |
-| +--------------------------------------+--+----------------------------------- |
-| |; Los -> Boolean ⏎; does l contain… | |; Los -> Boolean ⏎; does l         |
-| contain… |                                                                     |
-| +--------------------------------------+--+----------------------------------- |
-| |;Los ->Boolean | | |                                                         |
-| |;doesl contain"dog" | | |                                                    |
-| | (define (contains-dog? l) | | |                                              |
-| | (contains? "dog" l)) | | |                                                   |
-| |;Los ->Boolean | | |                                                         |
-| |;doesl contain"cat" | | |                                                    |
-| | (define (contains-cat? l) | | |                                              |
-| | (contains? "cat" l)) | | |                                                   |
-| +--------------------------------------+--+----------------------------------- |
-+--------------------------------------------------------------------------------+
+
+**右（contains-cat?）**
+
+```racket
+; Los -> Boolean
+; does l contain "cat"
+(define (contains-cat? l)
+  (contains? "cat" l))
 ```
 
 いま目撃したのは、抽象化、より正確には関数的抽象化と呼ばれるものである。関数の異なる版を抽象化することは、プログラムから類似性を排除する一つの方法であり、これから見るように、類似性を取り除くことは、長い期間にわたってプログラムを健全に保つことを単純にする。
