@@ -66,11 +66,18 @@ python3 tools/htdp_figures.py gate --mode report   # report|warn|error
 ```bash
 # 例: 画像版パスを変える
 export HTDP_BOOK_BASE=https://htdp.org/2026-5-28/Book/
-# 例: 欠けたらビルド失敗にしたいときだけ
+# 例: 欠けを警告だけ見る（ビルドは続行）
+FIGURES_GATE=warn ./build_translation.sh
+# 例: 欠けたらビルド失敗にしたいときだけ（CI 向き・既定ではない）
 FIGURES_GATE=error ./build_translation.sh
 # 例: 再ダウンロードを飛ばす
 SKIP_FIGURE_FETCH=1 ./build_translation.sh
+# 例: 崩れた ASCII 対比図を公式 HTML から復元（Part III+）
+python3 tools/fix_ascii_figures.py --report-only
+python3 tools/fix_ascii_figures.py
 ```
+
+**ゲートの段階運用:** 日常は `report`（既定）→ 気づきたいとき `warn` → リリース/CI でだけ `error`。詳細は `figures-policy.md`。
 
 #### 付録マニュアル一覧
 

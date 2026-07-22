@@ -426,6 +426,32 @@ def cmd_expand_tree(args: argparse.Namespace) -> int:
     return 0
 
 
+
+def ascii_broken_inventory() -> list[str]:
+    """Report remaining classic +--- Figure boxes in book chapters 07-14."""
+    try:
+        from tools.fix_ascii_figures import inventory
+    except Exception:
+        try:
+            import importlib.util
+            spec = importlib.util.spec_from_file_location(
+                "fix_ascii_figures", ROOT / "tools" / "fix_ascii_figures.py"
+            )
+            mod = importlib.util.module_from_spec(spec)
+            assert spec.loader is not None
+            spec.loader.exec_module(mod)
+            inventory = mod.inventory
+        except Exception:
+            return []
+    hits: list[str] = []
+    for md in sorted(ROOT.glob("??-*.md")):
+        if not md.name[:2].isdigit():
+            continue
+        if not (7 <= int(md.name[:2]) <= 14):
+            continue
+        hits.extend(inventory(md))
+    return hits
+
 def inventory_stats() -> tuple[dict[tuple[str, str], list[str]], int, int, int, list[str]]:
     """needed, present, missing, bare_count, missing_keys."""
     needed = collect_needed_from_markdown()
@@ -471,8 +497,20 @@ def cmd_report(args: argparse.Namespace) -> int:
     out = Path(args.out) if args.out else BUILD / "figures-inventory.md"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    broken = ascii_broken_inventory()
     print(f"Inventory -> {out} (present={present}, missing={missing}, bare_placeholders={bare})")
     print(f"  BOOK_BASE={SOURCE_BASES['book']}")
+    print(f"  broken ASCII figures (Part III–book 07–14): {len(broken)}")
+    for h in broken[:20]:
+        print(f"    - {h}")
+    # append to report file
+    extra = ["", f"- broken ASCII figure fences (07–14): **{len(broken)}**", ""]
+    if broken:
+        extra.append("| location |")
+        extra.append("|----------|")
+        extra.extend(f"| `{h}` |" for h in broken)
+        extra.append("")
+    out.write_text(out.read_text(encoding="utf-8") + "\n".join(extra) + "\n", encoding="utf-8")
     if args.fail_on_missing and missing:
         return 2
     return 0

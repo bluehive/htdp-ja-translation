@@ -66,26 +66,25 @@
 
 これが表現可能な最小の数である。要するに、4桁（と符号）の科学的記数法を使うと、きわめて広い範囲の数と分数を表せるが、この改善はそれ自身の問題を伴う。
 
+> **図143: Functions for inexact representations**
+
+```racket
+; N Number N -> Inex
+; makes an instance of Inex after checking the arguments
+(define (create-inex m s e)
+  (cond
+    [(and (<= 0 m 99) (<= 0 e 99) (or (= s 1) (= s -1)))
+     (make-inex m s e)]
+    [else (error "bad values given")]))
+
+; Inex -> Number
+; converts an inex into its numeric equivalent
+(define (inex->number an-inex)
+  (* (inex-mantissa an-inex)
+     (expt
+       10 (* (inex-sign an-inex) (inex-exponent an-inex)))))
 ```
-+--------------------------------------------------------------+
-| Figure 143: Functions for inexact representations            |
-|                                                              |
-|; N Number N -> Inex                                         |
-|; makes an instance of Inex after checking the arguments     |
-| (define (create-inex m s e)                                  |
-|   (cond                                                      |
-|     [(and (<= 0 m 99) (<= 0 e 99) (or (= s 1) (= s -1)))     |
-|      (make-inex m s e)]                                      |
-|     [else (error "bad values given")]))                      |
-|                                                              |
-|; Inex -> Number                                             |
-|; converts an inex into its numeric equivalent               |
-| (define (inex->number an-inex)                               |
-|   (* (inex-mantissa an-inex)                                 |
-|      (expt                                                   |
-|        10 (* (inex-sign an-inex) (inex-exponent an-inex))))) |
-+--------------------------------------------------------------+
-```
+
 
 問題を理解するには、これらの選択を ISL+ でのデータ表現として具体化し、いくつか実験するのが最善である。固定サイズの数を、3つのフィールドをもつ構造体で表そう：
 
@@ -331,27 +330,26 @@ Inex にとって大きすぎる数は、計算の途中で生じ得る。例え
 
 を定義領域に加えよ。`(my-exptinex30)` は何か。`(my-exptexac30)` はどうか。どちらの答えがより有用か。
 
+> **図144: A Janus-faced series of inexact numbers**
+
+```racket
+(define JANUS
+  (list 31.0
+        #i2e+34
+        #i-1.2345678901235e+80
+        2749.0
+        -2939234.0
+        #i-2e+33
+        #i3.2e+270
+        17.0
+        #i-2.4e+270
+        #i4.2344294738446e+170
+        1.0
+        #i-8e+269
+        0.0
+        99.0))
 ```
-+-----------------------------------------------------+
-| Figure 144: A Janus-faced series of inexact numbers |
-|                                                     |
-| (define JANUS                                       |
-|   (list 31.0                                        |
-|         #i2e+34                                     |
-|         #i-1.2345678901235e+80                      |
-|         2749.0                                      |
-|         -2939234.0                                  |
-|         #i-2e+33                                    |
-|         #i3.2e+270                                  |
-|         17.0                                        |
-|         #i-2.4e+270                                 |
-|         #i4.2344294738446e+170                      |
-|         1.0                                         |
-|         #i-8e+269                                   |
-|         0.0                                         |
-|         99.0))                                      |
-+-----------------------------------------------------+
-```
+
 
 **演習 419. 桁違いに異なる桁の2つの不正確数を足すと、結果として大きい方だけが返ってくることがある。
 例えば、数体系が有効桁を15桁しか使わない場合、因子が
@@ -404,14 +402,12 @@ ISL+ のような言語では、数を正確な有理数に変換し、それら
 
 `oscillate` を自然数 n に適用すると、数学的な級数の最初の n 要素が生成される。これは図145のようなグラフとして理解するのが最善である。DrRacket で `(oscillate15)` を実行し、結果を検査せよ。
 
-```
-+------------------------------------+
-| Figure 145: The graph of oscillate |
-|                                    |
-| [image: pict_179.png]              |
-| [image: pict_179.png]              |
-+------------------------------------+
-```
+> **図145: The graph of oscillate**
+
+> 原本は次の画像を含む（画像プレースホルダ は図版パイプラインで埋め込み可）:
+>
+> [image: pict_179.png]
+
 
 その結果を左から右へ足すと、右から左へ足すのと異なる結果が計算される：
 

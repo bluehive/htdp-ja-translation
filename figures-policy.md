@@ -25,18 +25,29 @@
 
 `download_book.py` も同じ `HTDP_BOOK_BASE` を参照する。
 
-## ゲート（C2）
+## ゲート（段階運用・F2）
+
+| モード | 意味 | いつ使う |
+|--------|------|----------|
+| **report**（**既定**） | 一覧を出すだけ。exit 0 | 日常のビルド・開発 |
+| **warn** | 画像欠落を警告。exit 0 | 手元で気づきたいとき |
+| **error** | 画像欠落で exit 2 | CI やリリース前（opt-in） |
 
 ```bash
-python3 tools/htdp_figures.py gate --mode report   # 一覧のみ・exit 0
-python3 tools/htdp_figures.py gate --mode warn     # 欠けを警告・exit 0
-python3 tools/htdp_figures.py gate --mode error    # 欠けで exit 2
-# または
+python3 tools/htdp_figures.py gate --mode report
+python3 tools/htdp_figures.py gate --mode warn
+python3 tools/htdp_figures.py gate --mode error
 FIGURES_GATE=warn ./build_translation.sh
 # 互換: FAIL_ON_MISSING_FIGURES=1 は error 相当
 ```
 
-判定対象は **参照 PNG がディスク上に無いか**（ドラフトの裸 `[image:` 件数は情報のみ。SoT として残るのが正常）。
+判定対象:
+
+1. **参照 PNG がディスク上に無いか**（主ゲート）
+2. **崩れた ASCII Figure 枠**（`+---` + Figure N）の残件数を report に併記（Part III 相当 07–14）
+
+ドラフトの裸 `[image:` 件数は情報のみ（SoT として残るのが正常）。  
+**既定を error にはしない**（ローカル開発が止まるため）。master 取り込み後に CI だけ error を検討。
 
 ## ディレクトリ
 
@@ -62,15 +73,15 @@ python3 tools/htdp_figures.py gate --mode report
 2. EPUB/PDF で代表 pict（237 / 240 / cat1 等）が見える
 3. プログラム例のコード文字列は原文方針を守る
 
-## Figure 86 型（C3）— 調査メモ
+## Figure 86 型（対比 ASCII）— 調査メモ（F3）
 
 | 項目 | 内容 |
 |------|------|
-| 原因 | Scribble の左右対比 Figure を固定幅 ASCII 1 ボックスに潰したため、セル境界と改行が壊れる |
-| 影響例 | 第III部 図86 / 図87（`contains-dog?` / `contains-cat?`） |
-| 本 PR の対処 | 日本語ドラフトで **左右を独立した ` ```racket ` フェンス**に分割（コード内容は原本の意図どおり） |
-| 本格対処 | `extract_to_markdown.py` の `figure_to_ascii` で対比図を検出して二重 fence 化する（ゴールデンテスト推奨） |
-| やらない | コードを「読みやすく」書き換え・意訳 |
+| 原因 | Scribble の左右対比 / 文法表 Figure を固定幅 ASCII 1 ボックスに潰したため、セル境界と改行が壊れる |
+| 影響例 | 図86–104（Part III）、Intermezzo の図105–110、143–145 等 |
+| 実施済み | `tools/fix_ascii_figures.py` が公式 HTML の `RktBlk`（および画像・文法表）から **二重 fence / 読みやすい枠**へ復元。Part III 以降（07–14）で `+---` 崩れ **0** を確認 |
+| 本格対処（未着手） | `extract_to_markdown.py` の `figure_to_ascii` を改修し、再抽出時に壊れないようにする。ゴールデンテスト（図88 左右コード一致など）を推奨 |
+| やらない | コードを「読みやすく」意訳・トークン改変 |
 
 ## やらないこと
 

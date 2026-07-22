@@ -1,5 +1,28 @@
 # HTDP 日本語翻訳 作業ログ
 
+## 2026-07-22 追加作業 F1/F2/F3（Issue #9 再承認）
+
+### 承認内容（オーナー）
+- F1: Part III **以降**の同型 ASCII 対比を棚卸ししてまとめて修正（図88 含む）
+- F2a/b/c: ゲート段階運用の文書化、warn 例、ASCII 崩れ report 検出
+- F2d/e: しない
+- F3: 抽出器本格修正はせず調査メモのみ
+- 成果物: 再ビルド・Drive コピー・Issue/PR ログ
+- master マージ: まだしない
+
+### 実施
+- `tools/fix_ascii_figures.py` 追加（公式 HTML → 二重 fence / 画像注記 / 文法表）
+- Part III+（07–14）の壊れた `+---` Figure を復元。**残 0**
+- 代表: 図88 `small`/`large`、図89 `inf`/`sup`、図90–104 等
+- `htdp_figures.py report` に ASCII 崩れ件数を併記
+- README / figures-policy にゲート段階運用と fix ツールを記載
+
+### 引き継ぎ
+- 再抽出したら `python3 tools/fix_ascii_figures.py` を再実行（根本は extract 側 follow-up）
+- ゲート既定は report のまま
+
+---
+
 ## 2026-07-22 次フェーズ（Issue #9 承認チェックリスト実行）
 
 ### オーナー承認（チェックリスト要約）

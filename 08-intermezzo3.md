@@ -113,51 +113,49 @@ local の場合、箱は式全体の周りに描かれる：
 
 一般に、同じ名前が関数内に複数回現れるとき、対応するスコープを表す箱は決して重ならない。箱が入れ子になる場合もあり、それが穴を生じる。それでも、絵は常に、より小さくより小さな入れ子の箱の階層である。
 
+> **図105: Drawing lexical scope contours for exercise 301**
+
+```racket
+(define (insertion-sort alon)
+  (local ((define (sort alon)
+            (cond
+              [(empty? alon) '()]
+              [else
+               (add (first alon) (sort (rest alon)))]))
+          (define (add an alon)
+            (cond
+              [(empty? alon) (list an)]
+              [else
+               (cond
+                 [(> an (first alon)) (cons an alon)]
+                 [else (cons (first alon)
+                             (add an (rest alon)))])])))
+    (sort alon)))
 ```
-+-------------------------------------------------------------+
-| Figure 105: Drawing lexical scope contours for exercise 301 |
-|                                                             |
-| (define (insertion-sort alon)                               |
-|   (local ((define (sort alon)                               |
-|             (cond                                           |
-|               [(empty? alon) '()]                           |
-|               [else                                         |
-|                (add (first alon) (sort (rest alon)))]))     |
-|           (define (add an alon)                             |
-|             (cond                                           |
-|               [(empty? alon) (list an)]                     |
-|               [else                                         |
-|                (cond                                        |
-|                  [(> an (first alon)) (cons an alon)]       |
-|                  [else (cons (first alon)                   |
-|                              (add an (rest alon)))])])))    |
-|     (sort alon)))                                           |
-+-------------------------------------------------------------+
-```
+
 
 Exercise 301. 図105における sort と alon の各束縛出現のスコープの周りに箱を描け。次に、sort の各出現から適切な束縛出現へ矢印を描け。今度は図106の変種についても同じ演習を繰り返せ。この2つの関数は、名前以外に違う点があるか。
 
+> **図106: Drawing lexical scope contours for exercise 301 (version 2)**
+
+```racket
+(define (sort alon)
+  (local ((define (sort alon)
+            (cond
+              [(empty? alon) '()]
+              [else
+               (add (first alon) (sort (rest alon)))]))
+          (define (add an alon)
+            (cond
+              [(empty? alon) (list an)]
+              [else
+                (cond
+                  [(> an (first alon)) (cons an alon)]
+                  [else (cons (first alon)
+                              (add an (rest alon)))])])))
+    (sort alon)))
 ```
-+-------------------------------------------------------------------------+
-| Figure 106: Drawing lexical scope contours for exercise 301 (version 2) |
-|                                                                         |
-| (define (sort alon)                                                     |
-|   (local ((define (sort alon)                                           |
-|             (cond                                                       |
-|               [(empty? alon) '()]                                       |
-|               [else                                                     |
-|                (add (first alon) (sort (rest alon)))]))                 |
-|           (define (add an alon)                                         |
-|             (cond                                                       |
-|               [(empty? alon) (list an)]                                 |
-|               [else                                                     |
-|                 (cond                                                   |
-|                   [(> an (first alon)) (cons an alon)]                  |
-|                   [else (cons (first alon)                              |
-|                               (add an (rest alon)))])])))               |
-|     (sort alon)))                                                       |
-+-------------------------------------------------------------------------+
-```
+
 
 **Exercise 302.** 変数の各出現は、その束縛出現から値を受け取ることを思い出そう。次の定義を考えよ：
 
@@ -214,29 +212,140 @@ ISL+ のループは、従来の言語のループと2点で異なる。第一�
 
 本節では、ISL+ のいわゆる `for` ループを導入する。目標は、従来のループを言語的構成子としてどう考えるかを示し、抽象化で組み立てたプログラムが代わりにループをどう使い得るかを示すことである。図107は、選択した `for` ループの文法を、Intermezzo 1: Beginning Student Language の BSL の文法の拡張として書き下している。どのループも式であり、すべての複合構成子と同様、キーワードで印付けされる。その後にいわゆる**内包節 (comprehension clauses)** の括弧付き列と、単一の式が続く。節はいわゆる**ループ変数 (loop variables)** を導入し、末尾の式は**ループ本体 (loop body)** である。
 
+> **図107: ISL+ extended with for loops**
+
 ```
-+-------------------------------------------------------------+
-| Figure 107: ISL+ extended with for loops                    |
-|                                                             |
-| +--------+--+---+--+--------------------------------------+ |
-| | expr   |  | = |  |...                                  | |
-| +--------+--+---+--+--------------------------------------+ |
-| |        |  | | |  | (for/list (clause clause...) expr)  | |
-| |        |  | | |  | (for*/list (clause clause...) expr) | |
-| |        |  | | |  | (for/and (clause clause...) expr)   | |
-| |        |  | | |  | (for*/and (clause clause...) expr)  | |
-| |        |  | | |  | (for/or (clause clause...) expr)    | |
-| |        |  | | |  | (for*/or (clause clause...) expr)   | |
-| |        |  | | |  | (for/sum (clause clause...) expr)   | |
-| |        |  | | |  | (for*/sum (clause clause...) expr)  | |
-| |        |  | | |  | (for/product (clause clause...) ex… | |
-| |        |  | | |  | (for*/product (clause clause...) e… | |
-| |        |  | | |  | (for/string (clause clause...) exp… | |
-| |        |  | | |  | (for*/string (clause clause...) ex… | |
-| | clause |  | = |  | [variable expr]                      | |
-| +--------+--+---+--+--------------------------------------+ |
-+-------------------------------------------------------------+
+expr
+=
+...
+|
+(
+for/list
+(
+clause
+clause
+...
+)
+expr
+)
+|
+(
+for*/list
+(
+clause
+clause
+...
+)
+expr
+)
+|
+(
+for/and
+(
+clause
+clause
+...
+)
+expr
+)
+|
+(
+for*/and
+(
+clause
+clause
+...
+)
+expr
+)
+|
+(
+for/or
+(
+clause
+clause
+...
+)
+expr
+)
+|
+(
+for*/or
+(
+clause
+clause
+...
+)
+expr
+)
+|
+(
+for/sum
+(
+clause
+clause
+...
+)
+expr
+)
+|
+(
+for*/sum
+(
+clause
+clause
+...
+)
+expr
+)
+|
+(
+for/product
+(
+clause
+clause
+...
+)
+expr
+)
+|
+(
+for*/product
+(
+clause
+clause
+...
+)
+expr
+)
+|
+(
+for/string
+(
+clause
+clause
+...
+)
+expr
+)
+|
+(
+for*/string
+(
+clause
+clause
+...
+)
+expr
+)
+clause
+=
+[
+variable
+expr
+]
 ```
+
 
 文法をざっと見ても、12個のループ構成子が6対になっていることがわかる：`list`、`and`、`or`、`sum`、`product`、`string` のそれぞれについて `for` と `for*` の変種がある。すべての `for` ループは節の変数を本体で束縛する。`for*` 変種は、後続の節でも変数を束縛する。次のほぼ同一のコード片が、これら2つのスコープ規則の違いを示す：
 
@@ -387,30 +496,29 @@ for*/list の目的はそうした対をすべて列挙することなので、f
 
 check-expect の代わりに check-satisfied を使う。for*/list が対を生成する正確な順序を予測したくないからである。
 
+> **図108: A compact definition of arrangements with for*/list**
+
+```racket
+; [List-of X] -> [List-of [List-of X]]
+; creates a list of all rearrangements of the items in w
+(define (arrangements w)
+  (cond
+    [(empty? w) '(())]
+    [else (for*/list ([item w]
+                      [arrangement-without-item
+                       (arrangements (remove item w))])
+            (cons item arrangement-without-item))]))
+
+; [List-of X] -> Boolean
+(define (all-words-from-rat? w)
+  (and (member? (explode "rat") w)
+       (member? (explode "art") w)
+       (member? (explode "tar") w)))
+
+(check-satisfied (arrangements '("r" "a" "t"))
+                 all-words-from-rat?)
 ```
-+-----------------------------------------------------------------+
-| Figure 108: A compact definition of arrangements with for*/list |
-|                                                                 |
-|; [List-of X] -> [List-of [List-of X]]                          |
-|; creates a list of all rearrangements of the items in w        |
-| (define (arrangements w)                                        |
-|   (cond                                                         |
-|     [(empty? w) '(())]                                          |
-|     [else (for*/list ([item w]                                  |
-|                       [arrangement-without-item                 |
-|                        (arrangements (remove item w))])         |
-|             (cons item arrangement-without-item))]))            |
-|                                                                 |
-|; [List-of X] -> Boolean                                        |
-| (define (all-words-from-rat? w)                                 |
-|   (and (member? (explode "rat") w)                              |
-|        (member? (explode "art") w)                              |
-|        (member? (explode "tar") w)))                            |
-|                                                                 |
-| (check-satisfied (arrangements '("r" "a" "t"))                  |
-|                  all-words-from-rat?)                           |
-+-----------------------------------------------------------------+
-```
+
 
 注意 図108は for*/list の別の文脈での使い方を示す。与えられたリスト内の文字の可能なすべての並べ替えを作る、という拡張設計問題のコンパクトな解を表示している。
 
@@ -434,25 +542,24 @@ Stop! for/fold ループがどう働くか想像せよ。
 
 もう一度 Stop! 上のすべての例を、ISL+ の既存の抽象化を使って書き直すのは有益な演習である。そうすると、抽象関数の代わりに `for` ループで関数を設計する方法も示唆される。ヒント and-map と or-map を設計せよ。それぞれ andmap と ormap のように働くが、適切な非 #false の値を返す。
 
+> **図109: Constructing sequences of natural numbers**
+
+```racket
+; N -> sequence?
+; constructs the infinite sequence of natural numbers,
+; starting from n
+(define (in-naturals n) ...)
+
+; N N N -> sequence?
+; constructs the following finite sequence of natural numbers:
+;   start
+;   (+ start step)
+;   (+ start step step)
+;   ...
+;  until the number exceeds end
+(define (in-range start end step) ...)
 ```
-+----------------------------------------------------------------+
-| Figure 109: Constructing sequences of natural numbers          |
-|                                                                |
-|; N -> sequence?                                               |
-|; constructs the infinite sequence of natural numbers,         |
-|; starting from n                                              |
-| (define (in-naturals n)...)                                   |
-|                                                                |
-|; N N N -> sequence?                                           |
-|; constructs the following finite sequence of natural numbers: |
-|; start                                                        |
-|; (+ start step)                                               |
-|; (+ start step step)                                          |
-|;...                                                          |
-|; until the number exceeds end                                 |
-| (define (in-range start end step)...)                         |
-+----------------------------------------------------------------+
-```
+
 
 数にわたるループは、常に 0 から (-n1) を列挙するとは限らない。しばしばプログラムは、連続でない数の列を踏む必要があり、別のときは無制限の数の供給が要る。この形のプログラミングに対応するため、Racket は列を生成する関数を備え、図109は ISL+ 用の abstraction ティーチパックが提供する2つを列挙する。
 
@@ -506,22 +613,46 @@ Exercise 307. find-name を定義せよ。この関数は名前と名前のリ�
 
 本節は Racket のパターンマッチャの簡略版を提示する。図110はその文法を示す。match は明らかに構文的に複雑な構成子である。その大枠は cond に似ているが、条件の代わりにパターンがあり、それらには独自の規則がある。
 
+> **図110: ISL+ match expressions**
+
 ```
-+---------------------------------------------------------+
-| Figure 110: ISL+ match expressions                      |
-|                                                         |
-| +---------+--+---+--+---------------------------------+ |
-| | expr    |  | = |  |...                             | |
-| +---------+--+---+--+---------------------------------+ |
-| |         |  | | |  | (match expr [pattern expr]...) | |
-| | pattern |  | = |  | variable                        | |
-| |         |  | | |  | literal-constant                | |
-| |         |  | | |  | (cons pattern pattern)          | |
-| |         |  | | |  | (structure-name pattern...)    | |
-| |         |  | | |  | (? predicate-name)              | |
-| +---------+--+---+--+---------------------------------+ |
-+---------------------------------------------------------+
+expr
+=
+...
+|
+(
+match
+expr
+[
+pattern
+expr
+]
+...
+)
+pattern
+=
+variable
+|
+literal-constant
+|
+(
+cons
+pattern
+pattern
+)
+|
+(
+structure-name
+pattern
+...
+)
+|
+(
+?
+predicate-name
+)
 ```
+
 
 大ざっぱに言えば、
 
