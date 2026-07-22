@@ -35,9 +35,12 @@ extracted/appendix/<manual>/original_markdown_**.md
 * 翻訳するときは **HTML を直接読まず**、`original_markdown_**.md` をソースにする。
 * コードブロックは原文と完全一致を保つ。
 * 図式・定義ボックスは原本側でアスキーアート化済み。翻訳では枠内の説明文のみ訳し、構造は維持する。
+* **画像 PNG**（`[image: pict_….png]` 等）はビルド時に公式サイトから取得して埋め込む（Issue #9）。詳細は `figures-policy.md`。
 * 本体の再生成: `python3 extract_to_markdown.py`
 * 付録の再取得: `python3 download_appendix_docs.py`（目次リンクを同一マニュアル内で再帰）
 * 付録の再抽出: `python3 extract_appendix_to_markdown.py`
+* 画像取得: `python3 tools/htdp_figures.py fetch`（`assets/htdp-figures/` は git 管理外）
+* 画像棚卸し: `python3 tools/htdp_figures.py report`
 * 対応表: `extracted/README.md` および `extracted/appendix/README.md`
 
 #### 付録マニュアル一覧

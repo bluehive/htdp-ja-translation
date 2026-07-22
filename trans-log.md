@@ -1,5 +1,33 @@
 # HTDP 日本語翻訳 作業ログ
 
+## 2026-07-22 図表パイプライン p0（Issue #9 / experimental/20260722-figures）
+
+### 方針（ユーザー承認済み）
+- 主戦略: 公式 / docs.racket-lang.org の PNG を **自動取得**して PDF/EPUB に埋め込む
+- 画像は **git に載せない**（`assets/htdp-figures/` を gitignore）
+- ドラフト `??-*.md` の SoT は `[image: …]` のまま。展開は **ビルド時**
+- 人手キャプションは例外のみ。コード例本文は改変しない
+
+### 実施内容
+- `tools/htdp_figures.py` 追加
+  - `fetch` — 参照 PNG 一括取得（book / quick / htdp-langs / gui）
+  - `expand` / `expand-tree` — プレースホルダ → `![](assets/htdp-figures/…)`（フェンス内の画像専用行はリフト）
+  - `report` — 欠落棚卸し（report-only ゲート）
+- `build_translation.sh` — fetch（任意スキップ可）→ expand → pandoc `--resource-path`
+- `figures-policy.md` — 受け入れ条件と禁止事項
+- `.gitignore` に `assets/htdp-figures/`
+- 初回 fetch: **228 / 228 成功（failed 0）**、約 1.3MB
+
+### 検証
+- expand 後の裸 `[image:` は 0
+- pandoc EPUB スモークで PNG が `EPUB/media/` に埋め込まれることを確認
+
+作業場所: worktree `/home/mevius/my-worktree-20260722-figures`（メインリポジトリ未変更）
+
+作業者: Grok
+
+---
+
 ## 2026-07-20 付録 quick / htdp-langs 翻訳・ビルド・公開準備
 
 ### 実施内容
