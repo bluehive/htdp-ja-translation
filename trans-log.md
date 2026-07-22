@@ -1,5 +1,16 @@
 # HTDP 日本語翻訳 作業ログ
 
+## 2026-07-22 数式 PNG 拡大修正（Issue #7 / 案 A）
+
+### 問題
+§28.2 数値積分付近の数式 PNG が `width=90%` 一律指定で引き伸ばされ読めない。グラフは問題なし。
+
+### 実施
+- `tools/htdp_figures.py` `md_image()`: PNG 高さを読み、**h≤40 は幅指定なし**、**h>40 は width=90%**
+- 再ビルド EPUB/PDF、GoogleDrive コピー、Issue #7 / PR #10 ログ
+
+---
+
 ## 2026-07-22 第V部 Generative Recursion 翻訳（Issue #7）
 
 ### 承認

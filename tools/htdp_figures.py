@@ -291,16 +291,49 @@ def cmd_fetch(args: argparse.Namespace) -> int:
     return 0 if (ok + skip) > 0 else 1
 
 
+def png_pixel_size(path: Path) -> tuple[int, int] | None:
+    """Return (width, height) for a PNG, or None if unreadable."""
+    try:
+        with path.open("rb") as f:
+            if f.read(8) != b"\x89PNG\r\n\x1a\n":
+                return None
+            f.read(8)  # length + IHDR
+            import struct
+
+            w, h = struct.unpack(">II", f.read(8))
+            return int(w), int(h)
+    except OSError:
+        return None
+
+
+# Inline formula strips from HtDP are short in height; forcing width=90% blows them up.
+FORMULA_MAX_HEIGHT_PX = 40
+
+
 def md_image(source: str, filename: str, alt: str | None) -> str:
-    # Empty alt avoids EPUB figcaption showing raw filenames like "pict_26.png".
-    # Real alt (rare) is kept when present and not the generic "image".
+    """
+    Expand to Markdown image.
+
+    - Empty alt avoids EPUB figcaptions that are just filenames.
+    - Large diagrams (height > FORMULA_MAX_HEIGHT_PX): width=90% for EPUB fit.
+    - Formula-like strips (height ≤ threshold): no width attribute (natural size).
+    """
     label = (alt or "").strip()
     if label.lower() in {"", "image"}:
         label = ""
     else:
         label = label.replace("[", "\\[").replace("]", "\\]")
-    # width attribute helps EPUB/HTML scale large diagrams
-    return f"![{label}]({asset_rel(source, filename)}){{width=90%}}"
+
+    rel = asset_rel(source, filename)
+    path = asset_path(source, filename)
+    size = png_pixel_size(path) if path.exists() else None
+    if size is not None:
+        _w, h = size
+        if h > FORMULA_MAX_HEIGHT_PX:
+            return f"![{label}]({rel}){{width=90%}}"
+        return f"![{label}]({rel})"
+    # Missing file: keep diagram-friendly default so large missing assets still scale
+    return f"![{label}]({rel}){{width=90%}}"
 
 
 def _line_is_image_only(line: str) -> bool:
