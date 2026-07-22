@@ -21,6 +21,11 @@
 ### 検証
 - expand 後の裸 `[image:` は 0
 - pandoc EPUB スモークで PNG が `EPUB/media/` に埋め込まれることを確認
+- **フルビルド**（`SKIP_FIGURE_FETCH=1 ./build_translation.sh`）成功
+  - inventory: present **228** / missing **0** / placeholders **287**
+  - EPUB: `htdp2e-ja.epub` 約 1.4MB、埋め込み media **219** PNG
+  - PDF: `htdp2e-ja.pdf` 約 17MB（typst 0.15.1）
+- コミット: `7ea37c8`（ツール・ポリシー）、成果物は後続コミット
 
 作業場所: worktree `/home/mevius/my-worktree-20260722-figures`（メインリポジトリ未変更）
 
