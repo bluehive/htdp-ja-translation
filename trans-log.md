@@ -1,5 +1,28 @@
 # HTDP 日本語翻訳 作業ログ
 
+## 2026-07-22 第V部 Generative Recursion 翻訳（Issue #7）
+
+### 承認
+- worktree: 既存 figures を継続
+- push 後 PR #10 に載せる
+- 章はバッチ（25–26 / 27 / 28 / 29–30）
+
+### 実施
+1. `extracted/original_markdown_11_part_five.md` → `11-part5-generative-recursion.md`
+2. ```racket 原文 91/91 保持
+3. ASCII 図 30 件を `fix_ascii_figures` で復元
+4. 進捗: `part5-translation-progress.md` / 疑似校正: `reviews/se-proof-issue7-part5.md`
+5. 第VI部は未訳のまま
+6. EPUB/PDF・Drive・push（後続）
+
+### 引き継ぎ
+- [ ] 第28–29章の人間通読
+- [ ] 第VI部は別 Issue
+- [ ] PR #10 レビュー
+
+---
+
+
 ## 2026-07-22 第IV部 目次見出し修正（Issue #6）
 
 ### 承認
