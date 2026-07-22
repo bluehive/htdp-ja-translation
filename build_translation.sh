@@ -113,11 +113,18 @@ echo "Pandoc: $PANDOC ($("$PANDOC" --version | head -n1))"
 RESOURCE_PATH="$ROOT"
 
 echo "=== 2. Generating EPUB ==="
+EPUB_CSS="$ROOT/epub-figures.css"
+EPUB_CSS_ARGS=()
+if [[ -f "$EPUB_CSS" ]]; then
+  echo "  EPUB CSS: $EPUB_CSS"
+  EPUB_CSS_ARGS=(--css="$EPUB_CSS")
+fi
 "$PANDOC" "$TEMP_MD" \
   -o "$OUT_EPUB" \
   --toc \
   --toc-depth=3 \
   --resource-path="$RESOURCE_PATH" \
+  "${EPUB_CSS_ARGS[@]}" \
   --metadata title="プログラムの設計方法 第二版（日本語訳）" \
   --metadata author="Matthias Felleisen, Robert Bruce Findler, Matthew Flatt, Shriram Krishnamurthi" \
   --metadata language=ja

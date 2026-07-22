@@ -292,10 +292,15 @@ def cmd_fetch(args: argparse.Namespace) -> int:
 
 
 def md_image(source: str, filename: str, alt: str | None) -> str:
-    label = (alt or filename).strip() or filename
-    # Escape rare brackets in alt
-    label = label.replace("[", "\\[").replace("]", "\\]")
-    return f"![{label}]({asset_rel(source, filename)})"
+    # Empty alt avoids EPUB figcaption showing raw filenames like "pict_26.png".
+    # Real alt (rare) is kept when present and not the generic "image".
+    label = (alt or "").strip()
+    if label.lower() in {"", "image"}:
+        label = ""
+    else:
+        label = label.replace("[", "\\[").replace("]", "\\]")
+    # width attribute helps EPUB/HTML scale large diagrams
+    return f"![{label}]({asset_rel(source, filename)}){{width=90%}}"
 
 
 def _line_is_image_only(line: str) -> bool:
@@ -428,7 +433,7 @@ def cmd_expand_tree(args: argparse.Namespace) -> int:
 
 
 def ascii_broken_inventory() -> list[str]:
-    """Report remaining classic +--- Figure boxes in book chapters 07-14."""
+    """Report remaining classic +--- Figure boxes in book chapters 00-14."""
     try:
         from tools.fix_ascii_figures import inventory
     except Exception:
@@ -447,7 +452,7 @@ def ascii_broken_inventory() -> list[str]:
     for md in sorted(ROOT.glob("??-*.md")):
         if not md.name[:2].isdigit():
             continue
-        if not (7 <= int(md.name[:2]) <= 14):
+        if not (0 <= int(md.name[:2]) <= 14):
             continue
         hits.extend(inventory(md))
     return hits
@@ -500,11 +505,11 @@ def cmd_report(args: argparse.Namespace) -> int:
     broken = ascii_broken_inventory()
     print(f"Inventory -> {out} (present={present}, missing={missing}, bare_placeholders={bare})")
     print(f"  BOOK_BASE={SOURCE_BASES['book']}")
-    print(f"  broken ASCII figures (Part III–book 07–14): {len(broken)}")
+    print(f"  broken ASCII figures (book 00–14): {len(broken)}")
     for h in broken[:20]:
         print(f"    - {h}")
     # append to report file
-    extra = ["", f"- broken ASCII figure fences (07–14): **{len(broken)}**", ""]
+    extra = ["", f"- broken ASCII figure fences (00–14): **{len(broken)}**", ""]
     if broken:
         extra.append("| location |")
         extra.append("|----------|")

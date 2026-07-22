@@ -1,5 +1,26 @@
 # HTDP 日本語翻訳 作業ログ
 
+## 2026-07-22 EPUB 図表修正（Issue #9 承認）
+
+### 問題
+EPUB の図表が崩れている（PDF より劣る）との報告。
+
+### 実施
+1. **ASCII Figure 復元を全書 00–14 に拡大**（Part I–II に 59 件の `+---` 崩れが残っていた）
+   - `tools/fix_ascii_figures.py` の HTML 対応を全章に拡張
+   - 残 0（book 00–14）
+2. **EPUB 専用 CSS** `epub-figures.css`
+   - 画像 max-width、コード pre-wrap、figure 改ページ抑制
+   - `build_translation.sh` が pandoc `--css` で適用
+3. **画像 alt** を空に（ファイル名 figcaption を抑制）+ `width=90%`
+4. EPUB/PDF 再ビルド、`~/GoogleDrive/` 再コピー
+
+### 結果
+- gate: missing 0 / ASCII broken 0
+- EPUB ~1.5MB（CSS 埋め込み、PNG 219）
+
+---
+
 ## 2026-07-22 追加作業 F1/F2/F3（Issue #9 再承認）
 
 ### 承認内容（オーナー）

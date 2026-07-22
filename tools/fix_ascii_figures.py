@@ -6,7 +6,7 @@ Only rewrites fenced blocks whose body contains a classic +--- box AND a Figure/
 caption. Dual RktBlk figures become dual ```racket fences (86/87 style).
 
 Usage:
-  python3 tools/fix_ascii_figures.py              # Part III+ book chapters (07–14)
+  python3 tools/fix_ascii_figures.py              # book chapters 00–14 (default)
   python3 tools/fix_ascii_figures.py --report-only
 """
 
@@ -23,18 +23,27 @@ sys.path.insert(0, str(ROOT))
 from bs4 import BeautifulSoup  # noqa: E402
 from extract_to_markdown import extract_code_block  # noqa: E402
 
-HTML_FOR_MD_PREFIX = {
-    range(7, 8): "part_three.html",  # 07
-}
-
 
 def html_for_md(md_name: str) -> str | None:
+    """Map Japanese draft filename → original_html page (figures live there)."""
     n = int(md_name[:2])
+    # Multiple drafts can share one HTML part file (e.g. Part II chapters).
     return {
+        0: "index.html",
+        1: "part_preface.html",
+        2: "part_prologue.html",
+        3: "part_one.html",
+        4: "i1-2.html",
+        5: "part_two.html",  # 05-part2-00 … 05-part2-13
+        6: "i2-3.html",
         7: "part_three.html",
         8: "i3-4.html",
+        9: "part_four.html",
         10: "i4-5.html",
+        11: "part_five.html",
         12: "i5-6.html",
+        13: "part_six.html",
+        14: "part_epilogue.html",
     }.get(n)
 
 
@@ -242,7 +251,7 @@ def main() -> int:
         md_files = [
             f
             for f in sorted(ROOT.glob("??-*.md"))
-            if f.name[:2].isdigit() and 7 <= int(f.name[:2]) <= 14
+            if f.name[:2].isdigit() and 0 <= int(f.name[:2]) <= 14
         ]
 
     if args.report_only:

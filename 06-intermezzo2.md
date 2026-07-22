@@ -161,68 +161,46 @@ DrRacket はこの式を `(list123)` に変換する。ここで、「なぜ `qu
 ここから Web ページの生成まではもう一歩だ。そう、正しく読んだ——Web ページだ！ 原理的には、Web ページは HTML と CSS というプログラミング言語で記述される。しかし、誰も HTML プログラムを直接書き下しはしない。代わりに、Web ページを*生成する*プログラムを設計する。驚くことではないが、BSL+ でもそのような関数を書ける。図83に単純な例がある。
 すぐにわかるように、この関数は二つの文字列を受け取り、深く入れ子になったリスト——Web ページのデータ表現——を生成する。
 
+> **図83: A simplistic HTML generator**
+
+```racket
+; String String -> ... deeply nested list ...
+; produces a web page with given author and title
+(define (my-first-web-page author title)
+  `(html
+     (head
+       (title ,title)
+       (meta ((http-equiv "content-type")
+              (content "text-html"))))
+     (body
+       (h1 ,title)
+       (p "I, " ,author ", made this page."))))
 ```
-+---------------------------------------------------+
-| Figure 83: A simplistic HTML generator            |
-|                                                   |
-|; String String ->... deeply nested list...     |
-|; produces a web page with given author and title |
-| (define (my-first-web-page author title)          |
-|   `(html                                          |
-|      (head                                        |
-|        (title,title)                             |
-|        (meta ((http-equiv "content-type")         |
-|               (content "text-html"))))            |
-|      (body                                        |
-|        (h1,title)                                |
-|        (p "I, ",author ", made this page."))))   |
-+---------------------------------------------------+
-```
+
 
 二度目に見ると、`title` パラメータが関数本体に二度現れることにも気づく：一度は `'head` とラベル付けされた入れ子リストの中に、もう一度は `'body` とラベル付けされた入れ子リストの中に。もう一方のパラメータは一度だけ現れる。我々はこの入れ子リストをページのテンプレートとみなし、パラメータはテンプレートの穴であり、有用な値で埋められるものだと考える。想像できるように、このテンプレート駆動の Web ページ作成スタイルは、サイト用に似たページを多数作りたいときに最も役立つ。
 
+> **図84: A data representation based on nested lists**
+
+```racket
+'(html
+  (head
+   (title "Hello World")
+
+
+   (meta
+    ((http-equiv "content-type")
+     (content "text-html"))))
+
+  (body
+    (h1 "Hello World")
+
+
+    (p "I, "
+       "Matthias"
+       ", made this page.")))
 ```
-+--------------------------------------------------------------------+
-| Figure 84: A data representation based on nested lists             |
-|                                                                    |
-| +--------------------------------------+--+----------------------+ |
-| | Nested List Representation           |  | Web Page Code (HTML) | |
-| +--------------------------------------+--+----------------------+ |
-| | '(html ⏎ (head ⏎ (title "Hello Worl… |  |                      | |
-| | '(html                               |  |                      | |
-| | (head                                |  |                      | |
-| | (title"Hello World")                 |  |                      | |
-| | (meta                                |  |                      | |
-| | ((http-equiv"content-type")          |  |                      | |
-| | (content"text-html"))))              |  |                      | |
-| | (body                                |  |                      | |
-| | (h1"Hello World")                    |  |                      | |
-| | (p"I, "                              |  |                      | |
-| | "Matthias"                           |  |                      | |
-| | ", made this page.")))               |  |                      | |
-| | `<html>`                             |  |                      | |
-| | `<head>`                             |  |                      | |
-| | `<title>`                            |  |                      | |
-| | `Hello World`                        |  |                      | |
-| | `</title>`                           |  |                      | |
-| | `<meta`                              |  |                      | |
-| | `http-equiv="content-type"`          |  |                      | |
-| | `content="text-html" />`             |  |                      | |
-| | `</head>`                            |  |                      | |
-| | `<body>`                             |  |                      | |
-| | `<h1>`                               |  |                      | |
-| | `Hello World`                        |  |                      | |
-| | `</h1>`                              |  |                      | |
-| | `<p>`                                |  |                      | |
-| | `I,`                                 |  |                      | |
-| | `Matthias,`                          |  |                      | |
-| | `made this page.`                    |  |                      | |
-| | `</p>`                               |  |                      | |
-| | `</body>`                            |  |                      | |
-| | `</html>`                            |  |                      | |
-| +--------------------------------------+--+----------------------+ |
-+--------------------------------------------------------------------+
-```
+
 
 関数の働きを理解するために、DrRacket の対話領域で実験する。準クォートとアンクォートの知識があれば、次の結果を予測できるはずだ：
 
@@ -367,14 +345,12 @@ DrRacket はこの式を `(list123)` に変換する。ここで、「なぜ `qu
 
 `make-ranking` を `one-list` に適用し、結果の Web ページをブラウザに表示すると、図85のスクリーンショットのようなものが見える。
 
-```
-+-------------------------------------------+
-| Figure 85: A web page generated with BSL+ |
-|                                           |
-| [image: web-page2.png]                    |
-| [image: web-page2.png]                    |
-+-------------------------------------------+
-```
+> **図85: A web page generated with BSL+**
+
+> 原本は次の画像を含む（画像プレースホルダは図版パイプラインで埋め込み可）:
+>
+> [image: web-page2.png]
+
 
 **ヒント** 文字列のリストから順位を決める関数を設計することもできるが、ここでは表の作成に集中してほしい。そこで次の関数を提供する：
 
