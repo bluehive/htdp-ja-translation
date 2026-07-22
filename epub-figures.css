@@ -1,0 +1,84 @@
+/* EPUB figure / code layout for HTDP Japanese translation (Issue #9)
+ *
+ * Pandoc embeds this after its default stylesheet. Goal: keep diagrams
+ * and code readable on e-ink and phone-width readers (unlike print PDF).
+ */
+
+/* Images: never overflow the page; center block figures */
+img {
+  max-width: 100% !important;
+  height: auto !important;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+figure {
+  margin: 1em 0;
+  text-align: center;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+figure img {
+  display: block;
+  margin: 0.5em auto;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Hide ugly auto-captions that are just asset filenames */
+figcaption {
+  font-size: 0.85em;
+  color: #444;
+  margin-top: 0.35em;
+}
+
+/* Code / restored dual fences: wrap instead of clipping off-screen */
+pre {
+  margin: 0.8em 0;
+  padding: 0.6em 0.7em;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+  line-height: 1.35;
+  background: #f6f6f6;
+  border-radius: 0.25em;
+}
+
+pre code {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+  font-size: 0.82em;
+}
+
+div.sourceCode {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+/* Block quotes used for figure titles */
+blockquote {
+  margin: 0.8em 0 0.8em 0.5em;
+  padding-left: 0.6em;
+  border-left: 3px solid #ccc;
+}
+
+/* Tables (grammar / wide ASCII leftovers): scroll rather than crush */
+table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+}
+
+td, th {
+  word-break: break-word;
+}
+
+/* Slightly more comfortable body measure on narrow devices */
+body {
+  line-height: 1.45;
+}

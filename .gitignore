@@ -1,6 +1,9 @@
 # Local build directories
 build/
 
+# Downloaded HtDP / Racket-doc figure PNGs (re-fetch with tools/htdp_figures.py)
+assets/htdp-figures/
+
 # Old scratch extracts (keep original_markdown under extracted/)
 extracted/part3_*.txt
 extracted/*_clean.txt

@@ -2,11 +2,12 @@
 """Download all main HTML pages from HtDP 2e online edition for translation reference.
 Keeps original HTML. Code inside will be preserved later.
 """
-import urllib.request
 import os
 import time
+import urllib.request
 
-BASE = "https://htdp.org/2026-5-28/Book/"
+# Override without editing: export HTDP_BOOK_BASE=https://htdp.org/YYYY-M-D/Book/
+BASE = (os.environ.get("HTDP_BOOK_BASE") or "https://htdp.org/2026-5-28/Book/").rstrip("/") + "/"
 PAGES = [
     "index.html",
     "part_preface.html",
