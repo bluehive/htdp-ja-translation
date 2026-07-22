@@ -1,5 +1,29 @@
 # HTDP 日本語翻訳 作業ログ
 
+## 2026-07-22 第IV部 Intertwined Data 翻訳（Issue #6）
+
+### 承認（Issue コメント）
+- worktree: `/home/mevius/my-worktree-20260722-figures`
+- ブランチ: `experimental/20260722-figures`（figures / PR #10 に同梱）
+- 対象: A のみ（`09-part4-intertwined-data.md`）。V・VI 保留
+- コード厳密保持・意訳可・図は #9 方針・疑似校正・EPUB/PDF・Drive・commit→SE→push→PR
+
+### 実施
+1. 英語 `extracted/original_markdown_09_part_four.md`（約 5061 行）を章別翻訳して結合
+2. ```racket 原文 163 本を JA に完全保持（照合欠落 0）
+3. `fix_ascii_figures.py` で Part IV の崩れた Figure 31 件を復元
+4. 進捗: `part4-translation-progress.md`
+5. 疑似校正: `reviews/se-proof-issue6-part4.md`
+6. README 第IV部を「完了」に更新
+7. EPUB/PDF ビルド → `~/GoogleDrive/` コピー（後続）
+
+### 引き継ぎ
+- [ ] 人間による第22–23章の通読推奨
+- [ ] 第V・VI部は別 Issue（#7 等）
+- [ ] master マージは PR #10 レビュー後
+
+---
+
 ## 2026-07-22 EPUB 図表修正（Issue #9 承認）
 
 ### 問題

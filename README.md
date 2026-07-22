@@ -108,7 +108,7 @@ python3 tools/fix_ascii_figures.py
 | Intermezzo 2 | `06-intermezzo2.md` | `…_06_i2-3.md` | **Quote, Unquote** — `quote` / 準クォート / `,@`、シンボル | **完了**（Issue #5） |
 | **第III部** Abstraction | `07-part3-abstraction.md` | `…_07_part_three.md` | 第14–18章：類似性の抽象・ISL 抽象・`local`・`lambda` | **完了** |
 | Intermezzo 3 | `08-intermezzo3.md` | `…_08_i3-4.md` | **Scope and Abstraction** — スコープ、`for` ループ、パターンマッチ | **完了**（Issue #5） |
-| **第IV部** Intertwined Data | `09-part4-intertwined-data.md` | `…_09_part_four.md` | 第19–24章：S式・木、反復的洗練、インタープリタ、XML、2入力・DB | **未訳**（最大分量） |
+| **第IV部** Intertwined Data | `09-part4-intertwined-data.md` | `…_09_part_four.md` | 第19–24章：S式・木、反復的洗練、インタープリタ、XML、2入力・DB | **完了**（Issue #6） |
 | Intermezzo 4 | `10-intermezzo4.md` | `…_10_i4-5.md` | **The Nature of Numbers** — 固定幅数、overflow/underflow、\*SL の数 | **完了**（Issue #5） |
 | **第V部** Generative Recursion | `11-part5-generative-recursion.md` | `…_11_part_five.md` | 第25–30章：生成的再帰・アルゴリズム、フラクタル、数値法、バックトラック | **未訳** |
 | Intermezzo 5 | `12-intermezzo5.md` | `…_12_i5-6.md` | **The Cost of Computation** — 時間の見積り、オーダー、述語/セレクタ | **完了**（Issue #5） |
