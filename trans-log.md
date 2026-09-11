@@ -187,3 +187,36 @@
 
 作業者: Grok Bot（agy 下書き + 独立検証）
 
+---
+
+## 2026-09-11 Part II（05-part2-08…13）完全化
+
+### 対象
+- `05-part2-08.md` … `05-part2-13.md`
+- `05-part2-arbitrarily-large-data.md`（スタブのまま。`build_translation.sh` は root `??-*.md` を結合）
+- `trans-log.md`（本エントリ）
+
+### 作業内容
+- ブランチ `docs/part2-complete-ja` を `origin/master` から作成（appendix 17/18/20 のローカル変更は触らず）。
+- 英原文 `extracted/original_markdown_05_part_two.md` を ch8–13 に分割し、subsection チャンクで `agy -p --print-timeout 15m` により日本語ドラフト生成。
+- 各チャンクを独立検証：ハングルなし、Exercise 129–230 を欠落なく保持、``` フェンス本文を英原文と照合し欠落分を復元。
+- 既知ギャップ対応：ch8「リスト of」混入修正、ch9 Exercise 142 補完・英語箇条書きは訳済確認、ch10 Exercise 176 補完、ch11 §11.4 見出しを「一般化する補助関数 (Auxiliary Functions that Generalize)」に修正、ch12 要約版を全文訳に置換（Exercise 209–214・229–230 含む）。
+- `hermes -z` サンプル検査を起動（並行負荷により一部タイムアウト気味。機械照合を主検証とした）。
+
+### フェンス／演習 照合
+| Ch | EN opens | JA opens | EN ex | JA ex | missing ex | hangul | notes |
+|----|----------|----------|-------|-------|------------|--------|-------|
+| 8 | 90 | 92 | 8 | 8 | — | 0 |  |
+| 9 | 132 | 149 | 24 | 24 | — | 0 |  |
+| 10 | 142 | 163 | 20 | 20 | — | 0 |  |
+| 11 | 100 | 103 | 14 | 14 | — | 0 | 11.4 OK |
+| 12 | 96 | 105 | 36 | 36 | — | 0 |  |
+| 13 | 0 | 0 | 0 | 0 | — | 0 |  |
+
+
+### 既知の残りニット
+- 一部 ASCII 図（Figure 枠）は挿入位置が近傍参照箇所で、章末に寄った重複フェンスがわずかに残る可能性（opens JA ≥ EN）。
+- 英原文抽出側のスペース欠落や figure 内英語はそのまま保持。
+- README / LICENSE は本作業では変更していない（親エージェント担当）。
+
+作業者: Grok Bot（agy 下書き + 独立検証）
