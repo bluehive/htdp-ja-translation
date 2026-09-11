@@ -1,15 +1,19 @@
-# 「How to Design Programs, Second Edition」日本語翻訳プロジェクト
+# 「How to Design Programs, Second Edition」日本語訳（個人学習用）
 
-本書は Matthias Felleisen、Robert Bruce Findler、Matthew Flatt、Shriram Krishnamurthi による名著『How to Design Programs, Second Edition』(HTDP 2e) を日本語に翻訳する有志プロジェクトです。
+> **宣言（先に読んでください）**  
+> これは **個人の学習のために、AI で英語原文を意訳したもの** です。公式訳ではありません。  
+> **正確さはありません。** 用語の揺れ、抜け、誤訳、省略、コード周りの説明の誤りがあり得ます。学習・参照のたたき台以上の用途（引用・授業・公開教材としての信頼）には使わないでください。わからない箇所は必ず [英語原典](https://htdp.org/) に戻ってください。
+
+対象は Matthias Felleisen、Robert Bruce Findler、Matthew Flatt、Shriram Krishnamurthi による *How to Design Programs, Second Edition*（HTDP 2e）です。有志の完成訳プロジェクトではなく、自分用の下書き置き場です。
 
 ## 目的
-* 書籍全体（目次、序文、プロローグ、全6部、エピローグ）を日本語に翻訳
-* サンプルコード（Racket / BSL / ISL など）は学習のために原文のまま厳密に保持
-* 結合した成果物を PDF および EPUB 形式としてビルドし、電子書籍リーダー等で閲覧可能にする
+* 自分の学習用に、書籍の日本語ドラフトを置く
+* サンプルコード（Racket / BSL / ISL など）は原文のまま残す（学習のため）
+* 必要なら PDF / EPUB に結合して読む
 
-## 翻訳の原本（重要）
+## 翻訳の原本（作業メモ）
 
-**今後の翻訳作業の原本は次のファイル群です。**
+**翻訳作業の入力は次のファイル群です。**
 
 ### 本体（HTDP 2e）
 
@@ -50,16 +54,16 @@ extracted/appendix/<manual>/original_markdown_**.md
 | gui | https://docs.racket-lang.org/gui/index.html | `extracted/appendix/gui/` |
 
 ## 翻訳手法
-本プロジェクトの翻訳は、AI アシスタントを用いて行われています。原文の論理的な構造やプログラムの仕様を完全に崩さず、日本語として読みやすく自然な表現に仕上げています。
+日本語ドラフトは **AI による意訳** です。前後の文脈から読みやすくしただけで、厳密な逐語訳でも校正済みの訳でもありません。上の宣言どおり **正確さはありません**。コードブロックは原文をコピーする方針ですが、抜けや改変が残っている可能性があります。
 
-## 現在の進捗状況
-* **前付け・目次 (00)**: 翻訳完了
-* **序文・プロローグ (01-02)**: 翻訳完了
-* **第I部 固定サイズのデータ (03)**: 一部〜詳細訳あり
-* **第II部 (05-part2-*)**: 第8〜13章の翻訳あり
-* **第III部 抽象化 (07)**: 一部章の翻訳あり
+## 現在のドラフト状況（正確さは保証しない）
+* **前付け・目次 (00)**: ドラフトあり
+* **序文・プロローグ (01-02)**: ドラフトあり
+* **第I部 固定サイズのデータ (03)**: ドラフトあり（穴埋め途中の箇所もあり）
+* **第II部 (05-part2-*)**: 第8〜13章のドラフトあり（原文より薄い／欠落あり）
+* **第III部 抽象化 (07)**: 一部のみドラフトあり
 
-その他の部・章・Intermezzoは、`extracted/original_markdown_**.md` を原本として順次翻訳する。
+その他の部・章・Intermezzoは、`extracted/original_markdown_**.md` を入力に順次ドラフトする。いずれも学習用の意訳であり、完了・正確を意味しません。
 
 ## ディレクトリ構成（抜粋）
 
@@ -107,6 +111,5 @@ build_translation.sh / .ps1
 
 ## ライセンス
 
-* **本翻訳プロジェクトコード・翻訳文書**: **MIT License**
-* **原著（英文）**: Matthias Felleisen, Robert Bruce Findler, Matthew Flatt, Shriram Krishnamurthi (CC BY-NC-ND)
-  * 原典: https://htdp.org/
+* **このリポジトリのコードと日本語ドラフト**: **BSD 2-Clause License**（ルートの `LICENSE`）
+* **原著（英文）**: Matthias Felleisen, Robert Bruce Findler, Matthew Flatt, Shriram Krishnamurthi（[CC BY-NC-ND](https://htdp.org/)）。日本語ドラフトは原著の代替ではありません。
