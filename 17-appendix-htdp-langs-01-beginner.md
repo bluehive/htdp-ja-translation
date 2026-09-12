@@ -205,7 +205,7 @@ A lambda できない be used outside の この alternate syntax.
 +----------------------+
 ```
 
-A quoted name は シンボル. A シンボル は 値, just like 0 または '().
+クォートされた名前はシンボルです。シンボルは 0 や '() と同じく値です。
 
 ```
 +-------------------------------------------------+
@@ -215,18 +215,13 @@ A quoted name は シンボル. A シンボル は 値, just like 0 または '(
 +-------------------------------------------------+
 ```
 
-Defines new 構造体 called 構造体-name. 構造体’s fields は named によって field-names. のあと define-struct, following new 関数s は available:
+structure-name という新しい構造体を定義します。構造体のフィールドは field-names によって名付けられます。define-struct のあと、次の新しい関数が使えます。
 
-- make-structure-name: takes a number of
-arguments equal to the number of fields in the structure,
-and creates a new instance of that structure.
-- structure-name-field-name: takes an
-instance of the structure and returns the value in the field named by
-field-name.
-- structure-name?: takes any value, and returns
-#true if the value is an instance of the structure.
+- make-structure-name: 構造体のフィールド数と同じ個数の引数を取り、その構造体の新しいインスタンスを作ります。
+- structure-name-field-name: 構造体のインスタンスを取り、field-name という名前のフィールドの値を返します。
+- structure-name?: 任意の値を取り、その値が構造体のインスタンスなら #true を返します。
 
-name の new 関数s introduced によって define-struct 〜してはならない be same として という の other 関数s または 変数s, そうでなければ define-struct reports エラー.
+define-struct が導入する新しい関数の名前は、他の関数や変数と同じであってはいけません。同じだと define-struct はエラーを報告します。
 
 ```
 +----------------------------------+
@@ -260,7 +255,7 @@ Calls 関数 named name. 値 の call は 値 の name’s body のとき every 
 
 Chooses 節 based 上の ある 条件. cond finds first question-式 という 評価結果は #true, then 評価する corresponding answer-式.
 
-If none of the question-expressions evaluates to #true, cond’s value is the answer-expression of the else clause. If there is no else, cond reports an error. If the result of a question-expression is neither #true nor #false, cond also reports an error.
+どの question-expression も #true に評価されない場合、cond の値は else 節の answer-expression です。else がなければ、cond はエラーを報告します。question-expression の結果が #true でも #false でもない場合も、cond はエラーを報告します。
 
 else は cond の外では使えません。
 
@@ -292,7 +287,7 @@ else は cond の外では使えません。
 +--------------------------------------------+
 ```
 
-Evaluates へ #true もし すべての 式s は #true. もし 任意の 式 は #false, と 式 評価結果は #false (and 式s へ right の という 式 は ない evaluated.)
+すべての expression が #true なら #true に評価されます。いずれかの expression が #false なら、and 式は #false に評価されます（その式より右の式は評価されません）。
 
 もし 任意の の 式s evaluate へ 値 other than #true または #false, と reports エラー.
 
@@ -304,7 +299,7 @@ Evaluates へ #true もし すべての 式s は #true. もし 任意の 式 は
 +-------------------------------------------+
 ```
 
-to #true as soon as one of the expressions is #true (and the expressions to the right of that expression are not evaluated.) If all of the expressions are #false, the or expression evaluates to #false を評価します。
+いずれかの expression が #true になった時点で #true に評価されます（その式より右の式は評価されません）。すべての expression が #false なら、or 式は #false に評価されます。
 
 もし 任意の の 式s evaluate へ 値 other than #true または #false, または reports エラー.
 
@@ -316,7 +311,7 @@ to #true as soon as one of the expressions is #true (and the expressions to the 
 +-----------------------------------------------+
 ```
 
-that the first expression evaluates to the same value as the expected-expression を検査します。
+最初の expression が expected-expression と同じ値に評価されることを検査します。
 
 ```racket
 (check-expect (fahrenheit->celsius 212) 100)
@@ -326,9 +321,9 @@ that the first expression evaluates to the same value as the expected-expression
   (* 5/9 (- f 32)))
 ```
 
-A check-expect expression must be placed at the top-level of a student program. Also it may show up anywhere in the program, including ahead of the tested function definition. By placing check-expects there, a programmer conveys to a future reader the intention behind the program with working examples, thus making it often superfluous to read the function definition proper. Syntax errors in check-expect (and all check forms) are intentionally delayed to run time so that students can write tests *without* necessarily writing complete function headers.
+check-expect 式は、学生プログラムのトップレベルに置く必要があります。また、検査対象の関数定義より前を含め、プログラムのどこにでも置けます。そこに check-expect を置くことで、プログラマは動く例とともにプログラムの意図を将来の読者に伝えられ、関数本体そのものを読む必要がしばしばなくなります。check-expect（およびすべての check 形式）の構文エラーは意図的に実行時まで遅延されるので、学生は完全な関数ヘッダを必ずしも書か*なくても*テストを書けます。
 
-It is an error for expr or expected-expr to produce an inexact number or a function value. As for inexact numbers, it is morally wrong to compare them for plain equality. Instead one tests whether they are both within a small interval; see check-within. As for functions (see Intermediate and up), it is provably impossible to compare functions.
+expr または expected-expr が不正確数や関数値を生成するのはエラーです。不正確数については、単純な等価で比べるのは原則として誤りです。代わりに両者が小さな区間内にあるかを検査します。check-within を参照してください。関数については（Intermediate 以上を参照）、関数どうしを比較するのは証明上不可能です。
 
 ```
 +-----------------------------------------------+
@@ -338,7 +333,7 @@ It is an error for expr or expected-expr to produce an inexact number or a funct
 +-----------------------------------------------+
 ```
 
-that the first expression evaluates to the same value as the expected-expression を検査します。
+最初の expression が expected-expression と同じ値に評価されることを検査します。
 
 form supplies same 乱数-数 generator へ both parts. もし both parts request 乱数 数s から same interval の中の same order, they receive same 乱数 数s.
 
@@ -388,7 +383,7 @@ Because 引数 へ a-helper-関数 は evaluated first, 乱数 は first called 
 +----------------------------------------+
 ```
 
-Checks という first 式 satisfies named 述語 (関数 の one 引数). Recall という “satisfies” means “the 関数 produces #true のための given 値.”
+最初の expression が、指定された述語（1引数の関数）を満たすことを検査します。「満たす」とは「その関数が与えられた値に対して #true を返す」という意味です。
 
 ここで は simple examples のための check-satisfied:
 
@@ -451,7 +446,7 @@ The test passed!
 +-----------------------------------------------------+
 ```
 
-whether the value of the expression expression is structurally equal to the value produced by the expected-expression expression; every number in the first expression must be within delta of the corresponding number in the second expression を検査します。
+expression という式の値が、expected-expression という式が生成する値と構造的に等しいかを検査します。最初の式の中の各数は、2番目の式の対応する数から delta 以内でなければなりません。
 
 ```racket
 (define-struct roots (x sqrt))
@@ -497,7 +492,7 @@ Ran 1 test.                                                                     
 +-------------------------------------------------+
 ```
 
-that the expression reports an error, where the error messages matches the value of expected-error-message, if it is present を検査します。
+expression がエラーを報告することを検査します。expected-error-message がある場合は、エラーメッセージがその値と一致することも検査します。
 
 ここで は typical beginner example という calls のための use の check-エラー:
 
@@ -2679,7 +2674,7 @@ a list of i copies of x を構築します。
 +-----------------------+
 ```
 
-some value x is on some list l, using eq? to compare x with items on l かどうかを判定します。
+値 x がリスト l 上にあるかを判定します。x と l 上の項目の比較には eq? を使います。
 
 ```racket
 > x
@@ -2698,7 +2693,7 @@ some value x is on some list l, using eq? to compare x with items on l かどう
 +------------------------+
 ```
 
-some value x is on some list l, using eq? to compare x with items on l かどうかを判定します。
+値 x がリスト l 上にあるかを判定します。x と l 上の項目の比較には eq? を使います。
 
 ```racket
 > x
@@ -2734,7 +2729,7 @@ some value x is on some list l, using eq? to compare x with items on l かどう
 +----------------------+
 ```
 
-Another name のための 空リスト
+空リストの別名
 
 ```racket
 > null
@@ -2770,7 +2765,7 @@ Another name のための 空リスト
 +--------------------------------+
 ```
 
-a list of numbers by stepping from start to end を構築します。
+start から end までステップで進み、数のリストを構築します。
 
 ```racket
 > (range 0 10 2)
@@ -2787,7 +2782,7 @@ a list of numbers by stepping from start to end を構築します。
 +----------------------+
 ```
 
-a list like the given one, with the first occurrence of the given item removed (comparing values with equal?) を構築します。
+与えられたリストと同様のリストを、与えられた項目の最初の出現を除いて構築します（値は equal? で比較します）。
 
 ```racket
 > x
@@ -2810,7 +2805,7 @@ a list like the given one, with the first occurrence of the given item removed (
 +--------------------------+
 ```
 
-a list like the given one, with all occurrences of the given item removed (comparing values with equal?) を構築します。
+与えられたリストと同様のリストを、与えられた項目のすべての出現を除いて構築します（値は equal? で比較します）。
 
 ```racket
 > x
@@ -2868,7 +2863,7 @@ a reversed version of a list を作成します。
 +----------------------+
 ```
 
-the second item of a non-empty list を選択します。
+空でないリストの2番目の項目を選びます。
 
 ```racket
 > x
@@ -2886,7 +2881,7 @@ the second item of a non-empty list を選択します。
 +----------------------+
 ```
 
-the seventh item of a non-empty list を選択します。
+空でないリストの7番目の項目を選びます。
 
 ```racket
 > v
@@ -2904,7 +2899,7 @@ the seventh item of a non-empty list を選択します。
 +----------------------+
 ```
 
-the sixth item of a non-empty list を選択します。
+空でないリストの6番目の項目を選びます。
 
 ```racket
 > v
@@ -2922,7 +2917,7 @@ the sixth item of a non-empty list を選択します。
 +----------------------+
 ```
 
-the third item of a non-empty list を選択します。
+空でないリストの3番目の項目を選びます。
 
 ```racket
 > x
@@ -2943,7 +2938,7 @@ the third item of a non-empty list を選択します。
 +------------------------+
 ```
 
-a posn from two arbitrary values を構築します。
+2つの任意の値から posn を構築します。
 
 ```racket
 > (make-posn 3 3)
@@ -2961,7 +2956,7 @@ a posn from two arbitrary values を構築します。
 +----------------------+
 ```
 
-the x component of a posn を取り出します。
+posn の x 成分を取り出します。
 
 ```racket
 > p
@@ -2979,7 +2974,7 @@ the x component of a posn を取り出します。
 +----------------------+
 ```
 
-the y component of a posn を取り出します。
+posn の y 成分を取り出します。
 
 ```racket
 > p
@@ -3019,7 +3014,7 @@ its input is a posn かどうかを判定します。
 +-----------------------------+
 ```
 
-Looks up 数 という corresponds へ given 文字 の中の ASCII table (if any).
+与えられた文字に対応する数を ASCII 表（あれば）から調べます。
 
 ```racket
 > (char->integer #\a)
@@ -3055,7 +3050,7 @@ a character represents an alphabetic character かどうかを判定します。
 +-----------------------------------+
 ```
 
-the characters are ordered in an increasing and case-insensitive manner かどうかを判定します。
+文字が、大文字小文字を区別せず昇順に並んでいるかを判定します。
 
 ```racket
 > (char-ci<=? #\b #\B)
@@ -3075,7 +3070,7 @@ the characters are ordered in an increasing and case-insensitive manner かど�
 +----------------------------------+
 ```
 
-the characters are ordered in a strictly increasing and case-insensitive manner かどうかを判定します。
+文字が、大文字小文字を区別せず厳密な昇順に並んでいるかを判定します。
 
 ```racket
 > (char-ci<? #\B #\c)
@@ -3113,7 +3108,7 @@ two characters are equal in a case-insensitive manner かどうかを判定し�
 +-----------------------------------+
 ```
 
-the characters are sorted in a decreasing and case-insensitive manner かどうかを判定します。
+文字が、大文字小文字を区別せず降順に並んでいるかを判定します。
 
 ```racket
 > (char-ci>=? #\b #\C)
@@ -3133,7 +3128,7 @@ the characters are sorted in a decreasing and case-insensitive manner かどう�
 +----------------------------------+
 ```
 
-the characters are sorted in a strictly decreasing and case-insensitive manner かどうかを判定します。
+文字が、大文字小文字を区別せず厳密な降順に並んでいるかを判定します。
 
 ```racket
 > (char-ci>? #\b #\B)
@@ -3151,7 +3146,7 @@ the characters are sorted in a strictly decreasing and case-insensitive manner �
 +--------------------------+
 ```
 
-the equivalent lower-case character を生成します。
+対応する小文字を生成します。
 
 ```racket
 > (char-downcase #\T)
@@ -3199,7 +3194,7 @@ a character represents a digit かどうかを判定します。
 +------------------------+
 ```
 
-the equivalent upper-case character を生成します。
+対応する大文字を生成します。
 
 ```racket
 > (char-upcase #\t)
@@ -3249,7 +3244,7 @@ a character represents space かどうかを判定します。
 +--------------------------------+
 ```
 
-the characters are ordered in an increasing manner かどうかを判定します。
+文字が昇順に並んでいるかを判定します。
 
 ```racket
 > (char<=? #\a #\a #\b)
@@ -3267,7 +3262,7 @@ the characters are ordered in an increasing manner かどうかを判定しま�
 +-------------------------------+
 ```
 
-the characters are ordered in a strictly increasing manner かどうかを判定します。
+文字が厳密な昇順に並んでいるかを判定します。
 
 ```racket
 > (char<? #\a #\b #\c)
@@ -3285,7 +3280,7 @@ the characters are ordered in a strictly increasing manner かどうかを判定
 +-------------------------------+
 ```
 
-the characters are equal かどうかを判定します。
+文字が等しいかを判定します。
 
 ```racket
 > (char=? #\b #\a)
@@ -3303,7 +3298,7 @@ the characters are equal かどうかを判定します。
 +--------------------------------+
 ```
 
-the characters are sorted in a decreasing manner かどうかを判定します。
+文字が降順に並んでいるかを判定します。
 
 ```racket
 > (char>=? #\b #\b #\a)
@@ -3321,7 +3316,7 @@ the characters are sorted in a decreasing manner かどうかを判定します�
 +-------------------------------+
 ```
 
-the characters are sorted in a strictly decreasing manner かどうかを判定します。
+文字が厳密な降順に並んでいるかを判定します。
 
 ```racket
 > (char>? #\A #\z #\a)
@@ -3357,7 +3352,7 @@ a value is a character かどうかを判定します。
 +-------------------------------+
 ```
 
-Translates 文字列 へ リスト の 1-letter 文字列s.
+文字列を1文字の文字列のリストに変換します。
 
 ```racket
 > (explode "cat")
@@ -3374,7 +3369,7 @@ Translates 文字列 へ リスト の 1-letter 文字列s.
 +---------------------------+
 ```
 
-Formats 文字列, possibly embedding 値s.
+文字列を整形し、値を埋め込むこともできます。
 
 ```racket
 > (format "Dear Dr. ~a:" "Flatt")
@@ -3392,7 +3387,7 @@ Formats 文字列, possibly embedding 値s.
 +----------------------+
 ```
 
-Concatenates リスト の 1-letter 文字列s へ one 文字列.
+1文字の文字列のリストを1つの文字列に連結します。
 
 ```racket
 > (implode (cons "c" (cons "a" (cons "t" '()))))
@@ -3441,7 +3436,7 @@ a s list of characters into a string を変換します。
 +----------------------------+
 ```
 
-a string of length i from c を生成します。
+c から長さ i の文字列を生成します。
 
 ```racket
 > (make-string 3 #\d)
@@ -3458,7 +3453,7 @@ a string of length i from c を生成します。
 +--------------------------+
 ```
 
-Replicates s i times.
+s を i 回複製します。
 
 ```racket
 > (replicate 3 "h")
@@ -3474,7 +3469,7 @@ Replicates s i times.
 +--------------------------+
 ```
 
-Builds 文字列 の given 文字s.
+与えられた文字から文字列を作ります。
 
 ```racket
 > (string #\d #\o #\g)
@@ -3556,7 +3551,7 @@ a string into a symbol を変換します。
 +-----------------------------------+
 ```
 
-all ’letters’ in the string are alphabetic かどうかを判定します。
+文字列中のすべての「文字」がアルファベットかどうかを判定します。
 
 ```racket
 > (string-alphabetic? "123")
@@ -3576,7 +3571,7 @@ all ’letters’ in the string are alphabetic かどうかを判定します。
 +------------------------------------+
 ```
 
-Concatenates 文字s の several 文字列s.
+複数の文字列の文字を連結します。
 
 ```racket
 > (string-append "hello" " " "world" " " "good bye")
@@ -3593,7 +3588,7 @@ Concatenates 文字s の several 文字列s.
 +-------------------------------+
 ```
 
-the strings are ordered in a lexicographically increasing and case-insensitive manner かどうかを判定します。
+文字列が、辞書順で昇順かつ大文字小文字を区別しない順序かを判定します。
 
 ```racket
 > (string-ci<=? "hello" "WORLD")
@@ -3610,7 +3605,7 @@ the strings are ordered in a lexicographically increasing and case-insensitive m
 +------------------------------+
 ```
 
-the strings are ordered in a lexicographically strictly increasing and case-insensitive manner かどうかを判定します。
+文字列が、辞書順で厳密な昇順かつ大文字小文字を区別しない順序かを判定します。
 
 ```racket
 > (string-ci<? "hello" "WORLD")
@@ -3627,7 +3622,7 @@ the strings are ordered in a lexicographically strictly increasing and case-inse
 +------------------------------+
 ```
 
-all strings are equal, character for character, regardless of case かどうかを判定します。
+すべての文字列が、大文字小文字を無視して文字ごとに等しいかを判定します。
 
 ```racket
 > (string-ci=?  "hello" "HellO")
@@ -3644,7 +3639,7 @@ all strings are equal, character for character, regardless of case かどうか�
 +-------------------------------+
 ```
 
-the strings are ordered in a lexicographically decreasing and case-insensitive manner かどうかを判定します。
+文字列が、辞書順で降順かつ大文字小文字を区別しない順序かを判定します。
 
 ```racket
 > (string-ci>? "WORLD" "hello")
@@ -3661,7 +3656,7 @@ the strings are ordered in a lexicographically decreasing and case-insensitive m
 +------------------------------+
 ```
 
-the strings are ordered in a lexicographically strictly decreasing and case-insensitive manner かどうかを判定します。
+文字列が、辞書順で厳密な降順かつ大文字小文字を区別しない順序かを判定します。
 
 ```racket
 > (string-ci>?  "WORLD" "hello")
@@ -3678,7 +3673,7 @@ the strings are ordered in a lexicographically strictly decreasing and case-inse
 +--------------------------------------+
 ```
 
-the first string appears in the second one without regard to the case of the letters かどうかを判定します。
+最初の文字列が2番目の文字列に、大文字小文字を無視して現れるかを判定します。
 
 ```racket
 > (string-contains-ci? "At" "caT")
@@ -3695,7 +3690,7 @@ the first string appears in the second one without regard to the case of the let
 +-----------------------------------+
 ```
 
-the first string appears literally in the second one かどうかを判定します。
+最初の文字列が2番目の文字列に文字どおり現れるかを判定します。
 
 ```racket
 > (string-contains? "at" "cat")
@@ -3711,7 +3706,7 @@ the first string appears literally in the second one かどうかを判定しま
 +--------------------------+
 ```
 
-Copies 文字列.
+文字列をコピーします。
 
 ```racket
 > (string-copy "hello")

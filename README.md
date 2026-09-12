@@ -82,12 +82,16 @@ extracted/
 build_translation.sh / .ps1
 ```
 
+## ビルド体裁（必読）
+
+EPUB / PDF の**順番・改ページ・Noto ゴシック**は [BUILD.md](BUILD.md) が正本です。`./build_translation.sh` がそれを実装します。
+
 ## ビルド方法
 
 ### 必要ツール
 1. **Pandoc**: Markdown の結合・EPUB/PDF 生成
 2. **PDF エンジン**: Linux では Typst または XeLaTeX / LibreOffice 経由など。Windows では Typst（`build_translation.ps1` 既定）
-3. **日本語フォント**: 例) Noto Serif CJK JP（Linux）、BIZ UDMincho（Windows）
+3. **日本語フォント**: Noto Sans CJK JP（ゴシック。詳細は [BUILD.md](BUILD.md)）
 
 ### ビルド実行
 
