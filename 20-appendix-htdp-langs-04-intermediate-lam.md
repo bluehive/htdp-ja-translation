@@ -195,85 +195,85 @@
 +---------------------------------------------+
 ```
 
-a function that takes as many arguments as given variables, and whose body is expression を作成します。
+与えられた変数と同じ個数の引数を取り、本体が expression である関数を作ります。
 
 ```
 +----------------------------------------+
-| [構文]                               |
+| [構文]                                 |
 |                                        |
 | (λ (variable variable...) expression) |
 +----------------------------------------+
 ```
 
-Greek letter λ は synonym のための lambda.
+ギリシャ文字 λ は lambda の同義語です。
 
 ```
 +----------------------------------------+
-| [構文]                               |
+| [構文]                                 |
 |                                        |
 | (expression expression expression...) |
 +----------------------------------------+
 ```
 
-Calls the function that results from evaluating the first expression. The value of the call is the value of function’s body when every instance of name’s variables are replaced by the values of the corresponding expressions.
+最初の expression を評価して得られる関数を呼び出します。呼び出しの値は、その関数本体の中の名前付き変数が、対応する式の値で置き換えられたときの本体の値です。
 
-The function being called must come from either a definition appearing before the function call, or from a lambda expression. The number of argument expressions must be the same as the number of arguments expected by the function.
+呼び出される関数は、その関数呼び出しより前に現れる定義から来るか、lambda 式から来なければなりません。引数の式の個数は、関数が期待する引数の個数と同じでなければなりません。
 
 ```
 +-------------------------------------+
-| [構文]                            |
+| [構文]                              |
 |                                     |
 | (local [definition...] expression) |
 +-------------------------------------+
 ```
 
-Groups related 定義s のための use の中の 式. Each 定義 できる be either define または define-struct.
+expression の中で使う関連する定義をまとめます。各 definition は define または define-struct のいずれかです。
 
-When evaluating local, each definition is evaluated in order, and finally the body expression is evaluated. Only the expressions within the local (including the right-hand-sides of the definitions and the expression) may refer to the names defined by the definitions. If a name defined in the local is the same as a top-level binding, the inner one “shadows” the outer one. That is, inside the local, any references to that name refer to the inner one.
+local を評価するとき、各定義が順番に評価され、最後に本体の expression が評価されます。定義によって導入された名前を参照できるのは、local の内側の式だけです（定義の右辺と本体の expression を含みます）。local で定義した名前がトップレベルの束縛と同じ場合、内側のものが外側のものを「影で覆い（シャドウ）」ます。つまり、local の内側では、その名前への参照は内側の定義を指します。
 
 ```
 +-----------------------------------------------+
-| [構文]                                      |
+| [構文]                                        |
 |                                               |
 | (letrec ([name expr-for-let]...) expression) |
 +-----------------------------------------------+
 ```
 
-local と同様ですが、with a simpler syntax. Each name defines a variable (or a function) with the value of the corresponding expr-for-let. If expr-for-let is a lambda, letrec defines a function, otherwise it defines a variable。
+local に似ていますが、構文がより簡単です。各 name は、対応する expr-for-let の値を持つ変数（または関数）を定義します。expr-for-let が lambda なら letrec は関数を定義し、そうでなければ変数を定義します。
 
 ```
 +---------------------------------------------+
-| [構文]                                    |
+| [構文]                                      |
 |                                             |
 | (let* ([name expr-for-let]...) expression) |
 +---------------------------------------------+
 ```
 
-letrec と同様ですが、each name can only be used in expression, and in expr-for-lets occuring after that name。
+letrec に似ていますが、各 name は本体の expression と、その名前より後に現れる expr-for-let の中だけで使えます。
 
 ```
 +--------------------------------------------+
-| [構文]                                   |
+| [構文]                                     |
 |                                            |
 | (let ([name expr-for-let]...) expression) |
 +--------------------------------------------+
 ```
 
-letrec と同様ですが、the defined names can be used only in the last expression, not the expr-for-lets next to the names。
+letrec に似ていますが、定義された名前は最後の expression の中だけで使え、名前の隣の expr-for-let の中では使えません。
 
 ```
 +----------------------+
-| [構文]             |
+| [構文]               |
 |                      |
 | (time expression)    |
 +----------------------+
 ```
 
-Measures the time taken to evaluate expression. After evaluating expression, time prints out the time taken by the evaluation (including real time, time taken by the CPU, and the time spent collecting free memory). The value of time is the same as that of expression.
+expression の評価にかかった時間を測ります。expression を評価したあと、time はその評価にかかった時間（実時間、CPU 時間、空きメモリの回収に使った時間を含む）を表示します。time の値は expression の値と同じです。
 
-### 4.4 共通の構文
+### 4.4 共通の構文（Common Syntaxes）
 
-following syntaxes behave same の中の *Intermediate とともに Lambda* level として they did の中の Intermediate Student level.
+次の構文は、*Intermediate with Lambda* レベルでも Intermediate Student レベルと同じ動きをします。
 
 ```
 +--------------------------------------------------+
@@ -305,9 +305,9 @@ expression の値で name という変数を定義します。変数名は他の
 +----------------------+
 ```
 
-A quoted name は シンボル. A quoted part は abbreviation のための nested リストs.
+クオートされた name はシンボルです。クオートされた部分は、入れ子のリストの略記です。
 
-通常、この quotation は written とともに ', like '(applebanana), but it できる also be written とともに quote, like (quote(applebanana)).
+通常、このクオートは ' で書き、例えば '(apple banana) のようにしますが、quote を使って (quote (apple banana)) のように書くこともできます。
 
 ```
 +----------------------+
@@ -317,9 +317,9 @@ A quoted name は シンボル. A quoted part は abbreviation のための nest
 +----------------------+
 ```
 
-同様: quote, but also allows escaping へ 式 “unquotes.”
+quote に似ていますが、式への「アンクオート」による脱出も許します。
 
-通常、quasi-quotations は written とともに backquote, `, like `(apple,(+12)), but they できる also be written とともに quasiquote, like (quasiquote(apple,(+12))).
+通常、準クオートはバッククオート ` で書き、例えば `(apple ,(+ 1 2)) のようにしますが、quasiquote を使って (quasiquote (apple ,(+ 1 2))) のように書くこともできます。
 
 ```
 +----------------------+
@@ -329,11 +329,11 @@ A quoted name は シンボル. A quoted part は abbreviation のための nest
 +----------------------+
 ```
 
-のもとで single quasiquote, `,`式 escapes から quote へ include evaluated 式 whose result は inserted へ abbreviated リスト.
+単一の準クオートの下では、`,expression` はクオートから脱出して、評価された式の結果を略記リストへ挿入します。
 
-のもとで multiple quasiquotes, `,`式 は 実数ly literal `,`式, decrementing quasiquote count によって one のための 式.
+複数の準クオートの下では、`,expression` は文字どおりの `,expression` であり、expression に対する準クオートの段数を1つ減らします。
 
-通常、unquote は written with,, but it できる also be written とともに unquote.
+通常、アンクオートは `,` で書きますが、unquote で書くこともできます。
 
 ```
 +----------------------+
@@ -343,11 +343,11 @@ A quoted name は シンボル. A quoted part は abbreviation のための nest
 +----------------------+
 ```
 
-のもとで single quasiquote, `,@`式 escapes から quote へ include evaluated 式 whose result は リスト へ splice へ abbreviated リスト.
+単一の準クオートの下では、`,@expression` はクオートから脱出して、評価結果がリストである式を、略記リストへ継ぎ足します（スプライスします）。
 
-のもとで multiple quasiquotes, splicing unquote は like unquote; という is, it decrements quasiquote count によって one.
+複数の準クオートの下では、スプライシング・アンクオートはアンクオートと同様で、準クオートの段数を1つ減らします。
 
-通常、splicing unquote は written with,, but it できる also be written とともに unquote-splicing.
+通常、スプライシング・アンクオートは `,@` で書きますが、unquote-splicing で書くこともできます。
 
 ```
 +-------------------------------------------------+
@@ -357,18 +357,13 @@ A quoted name は シンボル. A quoted part は abbreviation のための nest
 +-------------------------------------------------+
 ```
 
-Defines new 構造体 called 構造体-name. 構造体’s fields は named によって field-names. のあと define-struct, following new 関数s は available:
+structure-name という新しい構造体を定義します。構造体のフィールドは field-name たちで名付けられます。define-struct のあと、次の新しい関数が使えます。
 
-- make-structure-name: takes a number of
-arguments equal to the number of fields in the structure,
-and creates a new instance of that structure.
-- structure-name-field-name: takes an
-instance of the structure and returns the value in the field named by
-field-name.
-- structure-name?: takes any value, and returns
-#true if the value is an instance of the structure.
+- make-structure-name: 構造体のフィールド数と同じ個数の引数を取り、その構造体の新しいインスタンスを作ります。
+- structure-name-field-name: 構造体のインスタンスを取り、field-name というフィールドの値を返します。
+- structure-name?: 任意の値を取り、その値がその構造体のインスタンスなら #true を返します。
 
-name の new 関数s introduced によって define-struct 〜してはならない be same として という の other 関数s または 変数s, そうでなければ define-struct reports エラー.
+define-struct が導入する新しい関数の名前は、他の関数や変数と同じであってはなりません。同じだと define-struct はエラーを報告します。
 
 ```
 +-----------------------------------------------------------------------------+
@@ -388,9 +383,9 @@ name の new 関数s introduced によって define-struct 〜してはならな
 +-----------------------------------------------------------------------------+
 ```
 
-Chooses 節 based 上の ある 条件. cond finds first question-式 という 評価結果は #true, then 評価する corresponding answer-式.
+ある条件に基づいて節を選びます。cond は #true に評価される最初の question-expression を見つけ、対応する answer-expression を評価します。
 
-If none of the question-expressions evaluates to #true, cond’s value is the answer-expression of the else clause. If there is no else, cond reports an error. If the result of a question-expression is neither #true nor #false, cond also reports an error.
+どの question-expression も #true に評価されない場合、cond の値は else 節の answer-expression です。else がなければ、cond はエラーを報告します。question-expression の結果が #true でも #false でもない場合も、cond はエラーを報告します。
 
 else は cond の外では使えません。
 
@@ -410,9 +405,9 @@ else は cond の外では使えません。
 +-----------------------------+
 ```
 
-とき: 値 の question-式 は #true, もし 評価する then-answer-式. とき: test は #false, もし 評価する else-answer-式.
+question-expression の値が #true のとき、if は then-answer-expression を評価します。テストが #false のとき、if は else-answer-expression を評価します。
 
-もし question-式 は neither #true nor #false, もし reports エラー.
+question-expression が #true でも #false でもない場合、if はエラーを報告します。
 
 ```
 +--------------------------------------------+
@@ -422,9 +417,9 @@ else は cond の外では使えません。
 +--------------------------------------------+
 ```
 
-Evaluates へ #true もし すべての 式s は #true. もし 任意の 式 は #false, と 式 評価結果は #false (and 式s へ right の という 式 は ない evaluated.)
+すべての expression が #true なら #true に評価されます。いずれかの expression が #false なら、and 式は #false に評価されます（その式より右の式は評価されません）。
 
-もし 任意の の 式s evaluate へ 値 other than #true または #false, と reports エラー.
+いずれかの expression が #true でも #false でもない値に評価された場合、and はエラーを報告します。
 
 ```
 +-------------------------------------------+
@@ -434,9 +429,9 @@ Evaluates へ #true もし すべての 式s は #true. もし 任意の 式 は
 +-------------------------------------------+
 ```
 
-to #true as soon as one of the expressions is #true (and the expressions to the right of that expression are not evaluated.) If all of the expressions are #false, the or expression evaluates to #false を評価します。
+いずれかの expression が #true になった時点で #true に評価されます（その式より右の式は評価されません）。すべての expression が #false なら、or 式は #false に評価されます。
 
-もし 任意の の 式s evaluate へ 値 other than #true または #false, または reports エラー.
+いずれかの expression が #true でも #false でもない値に評価された場合、or はエラーを報告します。
 
 ```
 +-----------------------------------------------+
@@ -446,7 +441,7 @@ to #true as soon as one of the expressions is #true (and the expressions to the 
 +-----------------------------------------------+
 ```
 
-that the first expression evaluates to the same value as the expected-expression を検査します。
+最初の expression が expected-expression と同じ値に評価されることを検査します。
 
 ```racket
 (check-expect (fahrenheit->celsius 212) 100)
@@ -456,21 +451,21 @@ that the first expression evaluates to the same value as the expected-expression
   (* 5/9 (- f 32)))
 ```
 
-A check-expect expression must be placed at the top-level of a student program. Also it may show up anywhere in the program, including ahead of the tested function definition. By placing check-expects there, a programmer conveys to a future reader the intention behind the program with working examples, thus making it often superfluous to read the function definition proper. Syntax errors in check-expect (and all check forms) are intentionally delayed to run time so that students can write tests *without* necessarily writing complete function headers.
+check-expect 式は学生プログラムのトップレベルに置かなければなりません。また、プログラムのどこに置いてもよく、テスト対象の関数定義より前でも構いません。そこに check-expect を置くことで、プログラマは動く例を通じて将来の読者にプログラムの意図を伝え、しばしば関数定義本体そのものを読む必要をなくします。check-expect（およびすべての check 形式）の構文エラーは、意図的に実行時まで遅延されます。学生が完全な関数ヘッダを必ずしも書かずにテストを書けるようにするためです。
 
-It is an error for expr or expected-expr to produce an inexact number or a function value. As for inexact numbers, it is morally wrong to compare them for plain equality. Instead one tests whether they are both within a small interval; see check-within. As for functions (see Intermediate and up), it is provably impossible to compare functions.
+expr または expected-expr が不正確数や関数値を生成するのはエラーです。不正確数については、単純な等価性で比較するのは道徳的に正しくありません。代わりに両者が小さな区間内にあるかを調べます。check-within を参照してください。関数については（Intermediate 以上）、関数を比較することは証明可能なほど不可能です。
 
 ```
 +-----------------------------------------------+
-| [構文]                                      |
+| [構文]                                        |
 |                                               |
 | (check-random expression expected-expression) |
 +-----------------------------------------------+
 ```
 
-that the first expression evaluates to the same value as the expected-expression を検査します。
+最初の expression が expected-expression と同じ値に評価されることを検査します。
 
-form supplies same 乱数-数 generator へ both parts. もし both parts request 乱数 数s から same interval の中の same order, they receive same 乱数 数s.
+この形式は、両側に同じ乱数生成器を供給します。両側が同じ区間の乱数を同じ順番で要求すれば、同じ乱数を受け取ります。
 
 ここで は simple example の where check-乱数 は useful:
 
@@ -490,7 +485,7 @@ form supplies same 乱数-数 generator へ both parts. もし both parts reques
   (make-player name (random WIDTH) (random HEIGHT)))
 ```
 
-Note how 乱数 は called 上の same 数s の中の same order の中の both parts の check-乱数. もし two parts call 乱数 のための different intervals, they は likely へ fail:
+check-random の両側で、random が同じ数に対して同じ順番で呼ばれていることに注意してください。両側が異なる区間で random を呼ぶと、失敗しやすくなります。
 
 ```racket
 ; String -> Player
@@ -506,9 +501,9 @@ Note how 乱数 は called 上の same 数s の中の same order の中の both 
    (make-player name (random WIDTH) height))
 ```
 
-Because 引数 へ a-helper-関数 は evaluated first, 乱数 は first called のための interval [0,HEIGHT) と then のための [0,WIDTH), という is, の中の different order than の中の preceding check-乱数.
+a-helper-function への引数が先に評価されるため、random は最初に区間 [0,HEIGHT) で、次に [0,WIDTH) で呼ばれます。つまり、前の check-random とは異なる順番です。
 
-それ は エラー のための expr または expected-expr へ produce 関数 値 または in正確 数; see note 上の check-expect のための details.
+expr または expected-expr が関数値や不正確数を生成するのはエラーです。詳細は check-expect の注を参照してください。
 
 ```
 +----------------------------------------+
@@ -518,9 +513,9 @@ Because 引数 へ a-helper-関数 は evaluated first, 乱数 は first called 
 +----------------------------------------+
 ```
 
-Checks という first 式 satisfies named 述語 (関数 の one 引数). Recall という “satisfies” means “the 関数 produces #true のための given 値.”
+最初の expression が、名前付きの predicate（1引数の関数）を満たすことを検査します。「満たす」とは「その関数が与えられた値に対して #true を生成する」という意味です。
 
-ここで は simple examples のための check-satisfied:
+check-satisfied の簡単な例を次に示します。
 
 ```racket
 > (check-satisfied 1 odd?)
@@ -532,7 +527,7 @@ The test passed!
 Ran 1 test.                                       0 tests passed.                                   Check failures:                                                        ┌───┐                                Actual value │ 1 │ does not satisfy even?.                     └───┘                        at line 3, column 0
 ```
 
-In general check-satisfied empowers プログラム designers へ use defined 関数s へ formulate test suites:
+一般に check-satisfied は、プログラム設計者が定義した関数を使ってテスト一式を書き表す力を与えます。
 
 ```racket
 ; [cons Number [List-of Number]] -> Boolean
@@ -566,7 +561,7 @@ In general check-satisfied empowers プログラム designers へ use defined �
     [else (if (<= x (first l)) (cons x l) (cons (first l) (insert x (rest l))))]))
 ```
 
-And yes, results の htdp-sort satisfy sorted? 述語:
+そして実際、htdp-sort の結果は sorted? 述語を満たします。
 
 ```racket
 > (check-satisfied (htdp-sort (list 1 2 0 3)) sorted?)
@@ -580,7 +575,7 @@ And yes, results の htdp-sort satisfy sorted? 述語:
 +-----------------------------------------------------+
 ```
 
-whether the value of the expression expression is structurally equal to the value produced by the expected-expression expression; every number in the first expression must be within delta of the corresponding number in the second expression を検査します。
+expression 式の値が expected-expression 式の生成する値と構造的に等しいかを検査します。最初の式の中のすべての数は、2番目の式の対応する数から delta 以内でなければなりません。
 
 ```racket
 (define-struct roots (x sqrt))
@@ -595,7 +590,7 @@ whether the value of the expression expression is structurally equal to the valu
     [else (cons (root-of (first xs)) (roots-table (rest xs)))]))
 ```
 
-Due へ presence の in正確 数s の中の nested data, check-within は correct choice のための testing, と test succeeds もし delta は reasonably large:
+入れ子のデータに不正確数が含まれるため、テストには check-within が正しい選択であり、delta が十分大きければテストは成功します。
 
 例:
 
@@ -604,7 +599,7 @@ Due へ presence の in正確 数s の中の nested data, check-within は corre
 The test passed!
 ```
 
-対照的に、のとき delta は small, test fails:
+対照的に、delta が小さいとテストは失敗します。
 
 例:
 
@@ -613,9 +608,9 @@ The test passed!
 Ran 1 test.                                                                                                                      0 tests passed.                                                                                                                  Check failures:                                                                                                                                       ┌────────────────────────────────────────┐                                      ┌─────────────────────────┐         Actual value │ '((make-roots 2.0 1.4142135623730951)) │ is not within 1e-5 of expected value │ '((make-roots 2 1.414)) │.                     └────────────────────────────────────────┘                                      └─────────────────────────┘ at line 5, column 0
 ```
 
-それ は エラー のための 式s または expected-式 へ produce 関数 値; see note 上の check-expect のための details.
+expressions または expected-expression が関数値を生成するのはエラーです。詳細は check-expect の注を参照してください。
 
-もし delta は ない 数, check-within reports エラー.
+delta が数でない場合、check-within はエラーを報告します。
 
 ```
 +-------------------------------------------------+
@@ -626,9 +621,9 @@ Ran 1 test.                                                                     
 +-------------------------------------------------+
 ```
 
-that the expression reports an error, where the error messages matches the value of expected-error-message, if it is present を検査します。
+expression がエラーを報告することを検査します。expected-error-message がある場合は、エラーメッセージがその値と一致することも検査します。
 
-ここで は typical beginner example という calls のための use の check-エラー:
+check-error の使用が求められる典型的な初学者の例を次に示します。
 
 ```racket
 (define sample-table
@@ -648,7 +643,7 @@ that the expression reports an error, where the error messages matches the value
               (lookup (rest table)))]))
 ```
 
-Consider following two examples の中の この context:
+この文脈での次の2つの例を考えてください。
 
 例:
 
@@ -672,7 +667,7 @@ The test passed!
 +--------------------------------------------------------+
 ```
 
-that the value of the first expression is that of one of the following expressions を検査します。
+最初の expression の値が、続く expression のいずれかと同じであることを検査します。
 
 ```racket
 ; [List-of X] -> X
@@ -688,7 +683,7 @@ that the value of the first expression is that of one of the following expressio
 The test passed!
 ```
 
-それ は エラー のための 任意の の 式s へ produce 関数 値; see note 上の check-expect のための details.
+いずれかの expression が関数値を生成するのはエラーです。詳細は check-expect の注を参照してください。
 
 ```
 +---------------------------------------------------------+
@@ -698,9 +693,9 @@ The test passed!
 +---------------------------------------------------------+
 ```
 
-that the value of the first expression is a number in between the value of the low-expression and the high-expression, inclusive を検査します。
+最初の expression の値が、low-expression の値と high-expression の値の間（両端を含む）の数であることを検査します。
 
-A check-range form は best used へ delimit possible results の 関数s という compute in正確 数s:
+check-range 形式は、不正確数を計算する関数の取り得る結果の範囲を区切るのに最も適しています。
 
 ```racket
 (define EPSILON 0.001)
@@ -718,7 +713,7 @@ A check-range form は best used へ delimit possible results の 関数s とい
 (check-range (differentiate sin 0) 0.99 1.0)
 ```
 
-それ は エラー のための 式, low-式, または high-式 へ produce 関数 値; see note 上の check-expect のための details.
+expression、low-expression、high-expression のいずれかが関数値を生成するのはエラーです。詳細は check-expect の注を参照してください。
 
 ```
 +----------------------+
@@ -728,9 +723,9 @@ A check-range form は best used へ delimit possible results の 関数s とい
 +----------------------+
 ```
 
-Makes 定義s の モジュール specified によって 文字列 available の中の current モジュール (i.e., current file), where 文字列 refers へ file relative へ current file.
+string で指定されたモジュールの定義を、現在のモジュール（つまり現在のファイル）で使えるようにします。string は現在のファイルからの相対パスのファイルを指します。
 
-The string is constrained in several ways to avoid problems with different path conventions on different platforms: a / is a directory separator,. always means the current directory,.. always means the parent directory, path elements can use only a through z (uppercase or lowercase), 0 through 9, -, _, and., and the string cannot be empty or contain a leading or trailing /.
+string には、プラットフォームごとのパス規約の問題を避けるための制約がいくつかあります。/ はディレクトリ区切り、. は常に現在のディレクトリ、.. は常に親ディレクトリを意味し、パス要素に使えるのは a から z（大文字小文字どちらも）、0 から 9、-、_、. だけで、文字列は空であってはならず、先頭や末尾の / を含んではなりません。
 
 ```
 +-----------------------+
@@ -740,7 +735,7 @@ The string is constrained in several ways to avoid problems with different path 
 +-----------------------+
 ```
 
-Accesses file の中の installed ライブラリ. ライブラリ name は 識別子 とともに same constraints として のための relative-path 文字列 (though without quotes), とともに additional constraint という it 〜してはならない contain a..
+インストール済みライブラリ内のファイルにアクセスします。ライブラリ名は、相対パス文字列と同じ制約を持つ識別子です（ただし引用符はありません）。さらに .. を含んではならないという制約があります。
 
 ```
 +-----------------------------------+
@@ -750,7 +745,7 @@ Accesses file の中の installed ライブラリ. ライブラリ name は 識�
 +-----------------------------------+
 ```
 
-Accesses a file in an installed library, making its definitions available in the current module (i.e., the current file). The first string names the library file, and the remaining strings name the collection (and sub-collection, and so on) where the file is installed. Each string is constrained in the same way as for the (requirestring) form.
+インストール済みライブラリ内のファイルにアクセスし、その定義を現在のモジュール（つまり現在のファイル）で使えるようにします。最初の string がライブラリファイル名で、残りの string がファイルがインストールされているコレクション（およびサブコレクションなど）の名前です。各 string は (require string) 形式と同じ制約を受けます。
 
 ```
 +---------------------------------------------------------+
@@ -760,9 +755,9 @@ Accesses a file in an installed library, making its definitions available in the
 +---------------------------------------------------------+
 ```
 
-Accesses ライブラリ という は distributed 上の internet via PLaneT server, making it 定義s available の中の current モジュール (i.e., current file).
+インターネット上の PLaneT サーバ経由で配布されているライブラリにアクセスし、その定義を現在のモジュール（つまり現在のファイル）で使えるようにします。
 
-full grammar のための planet requires は given の中の Importing と Exporting: require と provide, but best place へ find examples の syntax は 上の the PLaneT server, の中の description の specific package.
+planet の require の完全な文法は Importing and Exporting: require and provide にありますが、構文の例を探すのにいちばんよい場所は、PLaneT サーバ上の特定のパッケージの説明です。
 
 ### 4.5 あらかじめ定義された関数
 
@@ -896,7 +891,7 @@ Note という シグネチャ violation does ない stop running プログラ�
 +------------------------+
 ```
 
-これ シグネチャ describes 値s through 述語: 式 must evaluate へ 関数 の one 引数 という 返す 真偽値. シグネチャ matches すべての 値s のための であり 述語 返す #true.
+このシグネチャは述語を通じて値を記述します。expression は1引数で真偽値を返す関数に評価されなければなりません。シグネチャは、その述語が #true を返すすべての値と一致します。
 
 #### 4.6.2 構造体シグネチャ
 
@@ -924,7 +919,7 @@ remaining subsections リスト それらの 関数s という は built へ プ
 +----------------------+
 ```
 
-Subtracts second (and following) 数(s) から first; negates 数 もし there は only one 引数.
+第1の数から第2（およびそれ以降）の数を引きます。引数が1つだけのときは、その数の符号を反転します。
 
 ```racket
 > (- 5)
@@ -1048,7 +1043,7 @@ the arccosine (inverse of cos) of a number を計算します。
 +----------------------+
 ```
 
-Increments given 数.
+与えられた数を1増やします。
 
 ```racket
 > (add1 2)
@@ -1155,7 +1150,7 @@ some value is complex かどうかを判定します。
 +------------------------+
 ```
 
-Flips sign の imaginary part の 複素数 数.
+複素数の虚部の符号を反転します。
 
 ```racket
 > (conjugate 3+4i)
@@ -1385,7 +1380,7 @@ the imaginary part from a complex number を取り出します。
 +-----------------------------+
 ```
 
-Approximates in正確 数 によって 正確 one.
+不正確数を正確数で近似します。
 
 ```racket
 > (inexact->exact 12.0)
@@ -1417,7 +1412,7 @@ some number is inexact かどうかを判定します。
 +--------------------------+
 ```
 
-Looks up 文字 という corresponds へ given 正確 整数 の中の ASCII table (if any).
+与えられた正確整数に対応する文字を ASCII 表から調べます（あれば）。
 
 ```racket
 > (integer->char 42)
@@ -1654,7 +1649,7 @@ a number `x` to a string with the specified number of digits を変換します�
 +------------------------+
 ```
 
-〜かどうかを判定する:  ある 値 は 数:
+ある値が数かどうかを判定します。
 
 ```racket
 > (number? "hello world")
@@ -1851,7 +1846,7 @@ some value is a real number かどうかを判定します。
 +----------------------+
 ```
 
-Rounds 実数 数 へ 整数 (rounds へ even へ break ties). 参照: floor と ceiling.
+実数を整数に丸めます（同点のときは偶数へ丸めます）。floor と ceiling も参照してください。
 
 ```racket
 > (round 12.3)
@@ -1949,7 +1944,7 @@ the square root of a number を計算します。
 +----------------------+
 ```
 
-Decrements given 数.
+与えられた数を1減らします。
 
 ```racket
 > (sub1 2)
@@ -1999,7 +1994,7 @@ some number is zero or not かどうかを判定します。
 +------------------------------+
 ```
 
-Produces 文字列 のための given 真偽値
+与えられた真偽値の文字列を生成します。
 
 ```racket
 > (boolean->string #false)
@@ -2068,7 +2063,7 @@ a value is false かどうかを判定します。
 +----------------------+
 ```
 
-Negates 真偽値 値.
+真偽値を否定します。
 
 ```racket
 > (not #false)
@@ -2137,7 +2132,7 @@ two symbols are equal かどうかを判定します。
 +-------------------------------+
 ```
 
-a single list from several, by concatenation of the items. In ISL and up: append also works when applied to one list or none を作成します。
+複数のリストから、要素を連結して1つのリストを作ります。ISL 以上では、append は1つのリストや0個のリストにも適用できます。
 
 ```racket
 > (append (cons 1 (cons 2 '())) (cons "a" (cons "b" '())))
@@ -2173,7 +2168,7 @@ the first pair on l whose first is equal? to x; otherwise it produces #false を
 +-----------------------------------+
 ```
 
-〜かどうかを判定する:  ある item は first item の pair の中の リスト の pairs. (それ compares items とともに eq?.)
+ある要素が、対のリストの中のある対の先頭要素かどうかを判定します（要素は eq? で比較します）。
 
 ```racket
 > a
@@ -2385,7 +2380,7 @@ LISP 風の selector: (cdr(carx))。
 +----------------------+
 ```
 
-LISP-style selector: (cdr(cdr(carx)))
+LISP 風の選択子: (cdr (cdr (car x)))
 
 ```racket
 > w
@@ -2768,7 +2763,7 @@ some value x is on some list l, using eq? to compare x with items on l かどう
 +---------------------------------+
 ```
 
-〜かどうかを判定する:  ある 値 は 上の リスト もし so, it produces suffix の リスト という starts とともに x もし not, it produces false. (それ compares 値s とともに eqv? 述語.)
+ある値がリスト上にあるかどうかを判定し、ある場合は x から始まるリストの接尾辞を生成し、ない場合は false を生成します（値は eqv? 述語で比較します）。
 
 ```racket
 > x
@@ -2785,7 +2780,7 @@ some value x is on some list l, using eq? to compare x with items on l かどう
 +----------------------+
 ```
 
-Another name のための 空リスト
+空リストの別名です。
 
 ```racket
 > null
@@ -3070,7 +3065,7 @@ its input is a posn かどうかを判定します。
 +-----------------------------+
 ```
 
-Looks up 数 という corresponds へ given 文字 の中の ASCII table (if any).
+与えられた文字に対応する数を ASCII 表から調べます（あれば）。
 
 ```racket
 > (char->integer #\a)

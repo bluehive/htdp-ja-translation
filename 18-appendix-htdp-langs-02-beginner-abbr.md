@@ -2,15 +2,11 @@
 
 **原本:** `extracted/appendix/htdp-langs/original_markdown_02_beginner-abbr.md`
 
-初学者向けに、説明文を日本語へ翻訳しています。コード・シグネチャ・実行例は原文のまま保持します。
+文法の記法では、太字のドット X... を用いて、X が任意の回数（0回、1回、またはそれ以上）現れうることを示します。また別途、文法はテンプレートで使う識別子として ... も定義しています。
 
-## 2 Beginning Student with List Abbreviations（リスト略記つき初級）
+Beginning Student Language の説明は、『How to Design Programs/2e』の Intermezzo 1 を参照してください。
 
-文法の記法では、X...（太字の点）という書き方で、X が任意の回数（0回、1回、またはそれ以上）現れてよいことを示します。別に、文法はテンプレートで使う識別子として ... も定義します。
-
-Beginning Student Language の説明は、How to Design Programs/2e の Intermezzo 1 を参照してください。
-
-参照: How へ Design Programs/2e, Intermezzo 2 のための explanation の quoted リストs.
+クォートしたリストの説明は、『How to Design Programs/2e』の Intermezzo 2 を参照してください。
 
 ```
 +-----------------------+--+---+--+--------------------------------------+
@@ -192,9 +188,9 @@ Beginning Student Language の説明は、How to Design Programs/2e の Intermez
 +----------------------+
 ```
 
-A quoted name は シンボル. A quoted part は abbreviation のための nested リストs.
+クォートされた name はシンボルです。クォートされた部分は、入れ子のリストの略記です。
 
-通常、この quotation は written とともに ', like '(applebanana), but it できる also be written とともに quote, like (quote(applebanana)).
+通常このクォートは ' で書き、'(applebanana) のようにしますが、quote を使って (quote(applebanana)) と書くこともできます。
 
 ```
 +----------------------+
@@ -204,9 +200,9 @@ A quoted name は シンボル. A quoted part は abbreviation のための nest
 +----------------------+
 ```
 
-同様: quote, but also allows escaping へ 式 “unquotes.”
+quote と似ていますが、式への「アンクォート」による脱出も許します。
 
-通常、quasi-quotations は written とともに backquote, `, like `(apple,(+12)), but they できる also be written とともに quasiquote, like (quasiquote(apple,(+12))).
+通常、準クォートはバッククォート ` で書き、`(apple,(+12)) のようにしますが、quasiquote を使って (quasiquote(apple,(+12))) と書くこともできます。
 
 ```
 +----------------------+
@@ -216,11 +212,11 @@ A quoted name は シンボル. A quoted part は abbreviation のための nest
 +----------------------+
 ```
 
-のもとで single quasiquote, `,`式 escapes から quote へ include evaluated 式 whose result は inserted へ abbreviated リスト.
+準クォートが1つのとき、`,`expression はクォートから脱出し、評価した式の結果を略記リストに挿入します。
 
-のもとで multiple quasiquotes, `,`式 は 実数ly literal `,`式, decrementing quasiquote count によって one のための 式.
+準クォートが複数あるとき、`,`expression は文字どおりの `,`expression であり、expression に対する準クォートの段数を1つ減らします。
 
-通常、unquote は written with,, but it できる also be written とともに unquote.
+通常、アンクォートは , で書きますが、unquote と書くこともできます。
 
 ```
 +----------------------+
@@ -230,15 +226,15 @@ A quoted name は シンボル. A quoted part は abbreviation のための nest
 +----------------------+
 ```
 
-のもとで single quasiquote, `,@`式 escapes から quote へ include evaluated 式 whose result は リスト へ splice へ abbreviated リスト.
+準クォートが1つのとき、`,@`expression はクォートから脱出し、評価結果であるリストを略記リストに継ぎ足し（スプライス）します。
 
-のもとで multiple quasiquotes, splicing unquote は like unquote; という is, it decrements quasiquote count によって one.
+準クォートが複数あるとき、スプライシング・アンクォートはアンクォートと同様で、準クォートの段数を1つ減らします。
 
-通常、splicing unquote は written with,, but it できる also be written とともに unquote-splicing.
+通常、スプライシング・アンクォートは ,@ で書きますが、unquote-splicing と書くこともできます。
 
 ### 2.4 共通の構文
 
-following syntaxes behave same の中の *Beginner とともに List Abbreviations* level として they did の中の Beginning Student level.
+次の構文は、*Beginner with List Abbreviations* レベルでも Beginning Student レベルと同じ振る舞いをします。
 
 ```
 +--------------------------------------------------+
@@ -270,9 +266,9 @@ expression の値で name という変数を定義します。変数名は他の
 +-----------------------------------------------------------+
 ```
 
-An alternate way へ defining 関数s. name は name の 関数, であり できない be same として という の another 関数 または 変数.
+関数を定義する別の書き方です。name は関数の名前で、他の関数や変数と同じであってはいけません。
 
-A lambda できない be used outside の この alternate syntax.
+lambda は、この別構文の外では使えません。
 
 ```
 +-------------------------------------------------+
@@ -282,18 +278,13 @@ A lambda できない be used outside の この alternate syntax.
 +-------------------------------------------------+
 ```
 
-Defines new 構造体 called 構造体-name. 構造体’s fields は named によって field-names. のあと define-struct, following new 関数s は available:
+structure-name という新しい構造体を定義します。構造体のフィールドは field-names で名付けられます。define-struct のあと、次の新しい関数が使えます：
 
-- make-structure-name: takes a number of
-arguments equal to the number of fields in the structure,
-and creates a new instance of that structure.
-- structure-name-field-name: takes an
-instance of the structure and returns the value in the field named by
-field-name.
-- structure-name?: takes any value, and returns
-#true if the value is an instance of the structure.
+- make-structure-name: 構造体のフィールド数と同じ個数の引数を取り、その構造体の新しいインスタンスを作ります。
+- structure-name-field-name: 構造体のインスタンスを取り、field-name で名付けられたフィールドの値を返します。
+- structure-name?: 任意の値を取り、その値が構造体のインスタンスなら #true を返します。
 
-name の new 関数s introduced によって define-struct 〜してはならない be same として という の other 関数s または 変数s, そうでなければ define-struct reports エラー.
+define-struct が導入する新しい関数の名前は、他の関数や変数と同じであってはいけません。同じだと define-struct はエラーを報告します。
 
 ```
 +----------------------------------+
@@ -1252,7 +1243,7 @@ the denominator of a rational を計算します。
 +----------------------+
 ```
 
-Euler’s 数.
+ネイピア数（オイラー数）です。
 
 ```racket
 > e
@@ -2171,7 +2162,7 @@ a single list from several, by concatenation of the items を作成します。
 +-------------------------------------------+
 ```
 
-the first pair on l whose first is equal? to x; otherwise it produces #false を生成します。
+l 上で first が x と equal? な最初の対を返します。なければ #false を返します。
 
 ```racket
 > (assoc "hello" '(("world" 2) ("hello" 3) ("good" 0)))
@@ -2615,7 +2606,7 @@ the fourth item of a non-empty list を選択します。
 +----------------------+
 ```
 
-a list of its arguments を構築します。
+引数からなるリストを組み立てます。
 
 ```racket
 > (list 1 2 3 4 5 6 7 8 9 0)
@@ -2632,7 +2623,7 @@ a list of its arguments を構築します。
 +-------------------------+
 ```
 
-a list by adding multiple items to a list を構築します。
+複数の要素をリストに加えてリストを組み立てます。
 
 ```racket
 > x
@@ -3063,7 +3054,7 @@ the y component of a posn を取り出します。
 +----------------------+
 ```
 
-its input is a posn かどうかを判定します。
+入力が posn かどうかを判定します。
 
 ```racket
 > q
@@ -3103,7 +3094,7 @@ Looks up 数 という corresponds へ given 文字 の中の ASCII table (if an
 +---------------------------------+
 ```
 
-a character represents an alphabetic character かどうかを判定します。
+文字がアルファベット文字を表すかを判定します。
 
 ```racket
 > (char-alphabetic? #\Q)
@@ -3217,7 +3208,7 @@ two characters are equal in a case-insensitive manner かどうかを判定し�
 +--------------------------+
 ```
 
-the equivalent lower-case character を生成します。
+対応する小文字を返します。
 
 ```racket
 > (char-downcase #\T)
@@ -3233,7 +3224,7 @@ the equivalent lower-case character を生成します。
 +---------------------------------+
 ```
 
-a character is a lower-case character かどうかを判定します。
+文字が小文字かどうかを判定します。
 
 ```racket
 > (char-lower-case? #\T)
@@ -3249,7 +3240,7 @@ a character is a lower-case character かどうかを判定します。
 +------------------------------+
 ```
 
-a character represents a digit かどうかを判定します。
+文字が数字を表すかを判定します。
 
 ```racket
 > (char-numeric? #\9)
@@ -3265,7 +3256,7 @@ a character represents a digit かどうかを判定します。
 +------------------------+
 ```
 
-the equivalent upper-case character を生成します。
+対応する大文字を返します。
 
 ```racket
 > (char-upcase #\t)
@@ -3281,7 +3272,7 @@ the equivalent upper-case character を生成します。
 +---------------------------------+
 ```
 
-a character is an upper-case character かどうかを判定します。
+文字が大文字かどうかを判定します。
 
 ```racket
 > (char-upper-case? #\T)
@@ -3297,7 +3288,7 @@ a character is an upper-case character かどうかを判定します。
 +---------------------------------+
 ```
 
-a character represents space かどうかを判定します。
+文字が空白を表すかを判定します。
 
 ```racket
 > (char-whitespace? #\tab)
@@ -3403,7 +3394,7 @@ a character represents space かどうかを判定します。
 +----------------------+
 ```
 
-a value is a character かどうかを判定します。
+値が文字かどうかを判定します。
 
 ```racket
 > (char? "a")
@@ -3423,7 +3414,7 @@ a value is a character かどうかを判定します。
 +-------------------------------+
 ```
 
-Translates 文字列 へ リスト の 1-letter 文字列s.
+文字列を1文字ずつの文字列のリストに変換します。
 
 ```racket
 > (explode "cat")
@@ -3458,7 +3449,7 @@ Formats 文字列, possibly embedding 値s.
 +----------------------+
 ```
 
-Concatenates リスト の 1-letter 文字列s へ one 文字列.
+1文字ずつの文字列のリストを1つの文字列に連結します。
 
 ```racket
 > (implode (cons "c" (cons "a" (cons "t" '()))))
@@ -3642,7 +3633,7 @@ a string into a symbol を変換します。
 +------------------------------------+
 ```
 
-Concatenates 文字s の several 文字列s.
+複数の文字列の文字を連結します。
 
 ```racket
 > (string-append "hello" " " "world" " " "good bye")
@@ -3710,7 +3701,7 @@ Concatenates 文字s の several 文字列s.
 +-------------------------------+
 ```
 
-the strings are ordered in a lexicographically decreasing and case-insensitive manner かどうかを判定します。
+文字列が、大文字小文字を区別せず辞書式に減少順かを判定します。
 
 ```racket
 > (string-ci>? "WORLD" "hello")
@@ -3727,7 +3718,7 @@ the strings are ordered in a lexicographically decreasing and case-insensitive m
 +------------------------------+
 ```
 
-the strings are ordered in a lexicographically strictly decreasing and case-insensitive manner かどうかを判定します。
+文字列が、大文字小文字を区別せず辞書式に厳密減少順かを判定します。
 
 ```racket
 > (string-ci>?  "WORLD" "hello")
@@ -3744,7 +3735,7 @@ the strings are ordered in a lexicographically strictly decreasing and case-inse
 +--------------------------------------+
 ```
 
-the first string appears in the second one without regard to the case of the letters かどうかを判定します。
+大文字小文字を無視して、最初の文字列が2番目の文字列に現れるかを判定します。
 
 ```racket
 > (string-contains-ci? "At" "caT")
@@ -3761,7 +3752,7 @@ the first string appears in the second one without regard to the case of the let
 +-----------------------------------+
 ```
 
-the first string appears literally in the second one かどうかを判定します。
+最初の文字列が2番目の文字列に文字どおり現れるかを判定します。
 
 ```racket
 > (string-contains? "at" "cat")
@@ -3793,7 +3784,7 @@ Copies 文字列.
 +------------------------------+
 ```
 
-a string like the given one with all ’letters’ as lower case を生成します。
+与えられた文字列と同様で、すべての「文字」を小文字にした文字列を返します。
 
 ```racket
 > (string-downcase "CAT")
@@ -3844,7 +3835,7 @@ the ith 1-letter substring from s を取り出します。
 +-----------------------------------+
 ```
 
-all ’letters’ in the string are lower case かどうかを判定します。
+文字列中のすべての「文字」が小文字かを判定します。
 
 ```racket
 > (string-lower-case? "CAT")
@@ -3860,7 +3851,7 @@ all ’letters’ in the string are lower case かどうかを判定します。
 +--------------------------------+
 ```
 
-all ’letters’ in the string are numeric かどうかを判定します。
+文字列中のすべての「文字」が数字かを判定します。
 
 ```racket
 > (string-numeric? "123")
@@ -3895,7 +3886,7 @@ the ith character from s を取り出します。
 +----------------------------+
 ```
 
-a string like the given one with all ’letters’ as upper case を生成します。
+与えられた文字列と同様で、すべての「文字」を大文字にした文字列を返します。
 
 ```racket
 > (string-upcase "cat")
@@ -3913,7 +3904,7 @@ a string like the given one with all ’letters’ as upper case を生成しま
 +-----------------------------------+
 ```
 
-all ’letters’ in the string are upper case かどうかを判定します。
+文字列中のすべての「文字」が大文字かを判定します。
 
 ```racket
 > (string-upper-case? "CAT")
@@ -3929,7 +3920,7 @@ all ’letters’ in the string are upper case かどうかを判定します。
 +-----------------------------------+
 ```
 
-all ’letters’ in the string are white space かどうかを判定します。
+文字列中のすべての「文字」が空白かを判定します。
 
 ```racket
 > (string-whitespace? (string-append " " (string #\tab #\newline #\return)))
@@ -3946,7 +3937,7 @@ all ’letters’ in the string are white space かどうかを判定します�
 +----------------------------+
 ```
 
-the strings are ordered in a lexicographically increasing manner かどうかを判定します。
+文字列が辞書式に増加順かを判定します。
 
 ```racket
 > (string<=? "hello" "hello")
@@ -3963,7 +3954,7 @@ the strings are ordered in a lexicographically increasing manner かどうかを
 +---------------------------+
 ```
 
-the strings are ordered in a lexicographically strictly increasing manner かどうかを判定します。
+文字列が辞書式に厳密増加順かを判定します。
 
 ```racket
 > (string<? "hello" "world")
@@ -3980,7 +3971,7 @@ the strings are ordered in a lexicographically strictly increasing manner かど
 +---------------------------+
 ```
 
-all strings are equal, character for character かどうかを判定します。
+すべての文字列が文字ごとに等しいかを判定します。
 
 ```racket
 > (string=? "hello" "world")
@@ -3999,7 +3990,7 @@ all strings are equal, character for character かどうかを判定します。
 +----------------------------+
 ```
 
-the strings are ordered in a lexicographically decreasing manner かどうかを判定します。
+文字列が辞書式に減少順かを判定します。
 
 ```racket
 > (string>=? "world" "hello")
@@ -4016,7 +4007,7 @@ the strings are ordered in a lexicographically decreasing manner かどうかを
 +---------------------------+
 ```
 
-the strings are ordered in a lexicographically strictly decreasing manner かどうかを判定します。
+文字列が辞書式に厳密減少順かを判定します。
 
 ```racket
 > (string>? "world" "hello")
@@ -4075,7 +4066,7 @@ the substring starting at i up to j (or the end if j is not provided) を取り�
 +--------------------------+
 ```
 
-two images are equal かどうかを判定します。
+2つの画像が等しいかを判定します。
 
 ```racket
 > c1
@@ -4095,7 +4086,7 @@ two images are equal かどうかを判定します。
 +-----------------------+
 ```
 
-a value is an image かどうかを判定します。
+値が画像かどうかを判定します。
 
 ```racket
 > c1
@@ -4134,7 +4125,7 @@ whether x and y are within eps of either other を検査します。
 +----------------------+
 ```
 
-A 値 という represents end の file:
+ファイルの終わりを表す値です：
 
 ```racket
 > eof
