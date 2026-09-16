@@ -1,45 +1,33 @@
 # 独立検証（live）: Intermezzo 1 日本語草稿
 
-- 日時: 2026-09-17 00:16 JST
-- 検証者: Hermes（grok-4.6 / xai-oauth）。agy 未使用。agy 提案は参照していない。
-- ブランチ: `docs/intermezzo1-complete-ja` @ `85cbce4`（`Align Intermezzo 1 terms with Part I/II after Hermes check.`）
-- JA: `04-intermezzo1.md`（59796 bytes / 41154 文字 / 1070 行）
-- EN: `extracted/original_markdown_04_i1-2.md`（53229 bytes / 52961 文字 / 1341 行）
-- 対象は **現在の** `04-intermezzo1.md`。`docs/hermes-check-i1-draft.md` と `docs/hermes-check-i1-local.md` は照合結果の突き合わせにだけ使い、結論は再計測から出した。
-- 方針: 公式訳ではない個人学習用意訳。正確さより「落ちがない」こと優先。フェンス改変は差し戻し。
+- 日時: 2026-09-17 01:22 JST
+- 検証者: Hermes（grok-4.6 / xai-oauth）。agy 未使用。agy 下訳・`docs/agy-check-i1.md` は開いていない。
+- ブランチ: `docs/intermezzo1-complete-ja` @ `fe0569cd0293a1f77a85be6bda422b9eae00ca77`
+- 本文の最終コミット: `85cbce4`（用語揃え）。本 HEAD は検証メモの追加のみ。
+- JA: `04-intermezzo1.md`（59796 bytes / 1069 行、SHA256 `f35557f93d7901f8c90335a374015f4d8b76e1c2105b7067a264514ec15ef18f`）
+- EN: `extracted/original_markdown_04_i1-2.md`（53229 bytes / 1340 行、SHA256 `bd1bfcd3d611ef312e53acef83cdf9e065927ec402ba8ee2a8622ea9a720ed4e`）
+- Issue: #16 / 作業指示 #25 / PR #26
+- 判定基準: #25（省略禁止、フェンス一字一句、見出しは「日本語 (English)」推奨、章・Exercise 番号は原本どおり）。公式訳ではない個人学習用意訳。
+- 方法: フェンス・見出し・リスト・Exercise を Python で抽出して突合。両ファイルを節ごとに通読。既存 `docs/hermes-review-i1.md` / `docs/hermes-check-i1-draft.md` / 旧 live は突き合わせ後に対照しただけ。結論は再計測から出した。
 
-## 総合判定
+## 主張 / 根拠 / 論拠
 
-**合格（ハードゲートはすべて通過。残件は軽微のみ）**
+主張: 現行草稿は #25 の差し戻し条件（段落・リスト・Exercise の省略、コードフェンス改変）を満たさない。ハードゲートは合格。明らかな誤訳は 1 件（「accidentally」）で、落ちではない。
 
-| 必須チェック | 判定 | 要約 |
+根拠: 下表の機械照合と、節ごとの通読（Boolean の段落差は練習問題 123 の指示文の位置、Error Messages の段落差は JA 末尾の免責追加）。
+
+論拠: 完了条件は「落ちがない」こととフェンス一致。意訳による文結合は欠落としない。agy フォールバック草稿は根拠に使っていない。
+
+## 必須チェック
+
+| 項目 | 判定 | 要約 |
 |---|---|---|
-| 1. 省略（段落・リスト・Exercise 116–128・コード例） | **合格** | `##` 11、`### Contents`、Figure 39–43、Note 10、Ex 116–128、番号リスト 36/36、箇条書き行 52/52。フェンス外のインライン式も空白正規化後に一致 |
-| 2. コードフェンスが EN と一字一句一致 | **合格** | 76/76。言語タグ込み連結 SHA256 一致。対ごとの本文不一致 0 |
-| 3. 見出し対応 | **合格** | EN の `##` 11 節がすべて JA にある。Error Messages の italic サブ見出し 5 も双语である |
-| 4. 誤訳・英語混在・プレースホルダ | **軽微のみ** | プレースホルダ 0。`85cbce4` で前回の用語指摘は解消済み。残るのは語用論の英語併記など |
+| 1. 省略（段落・リスト・Exercise 116–128） | **合格** | `##` 11/11。リスト 52/52（番号付き 36、箇条書き 16）。Figure 39–43。`> **注 (Note):**` 10 + 文法用語注 1。Ex 116–128 欠番なし |
+| 2. コードフェンスが EN と一字一句一致 | **合格** | 76/76。言語タグ込み連結 SHA256 が JA=EN。対ごとの本文不一致 0。言語タグ: `racket` 50 + 空 26 |
+| 3. 見出し・練習番号 | **合格**（章タイトル 1 件だけ推奨形式と逆） | 節見出しは `日本語 (English)`。章タイトルのみ English 先行。Exercise は `練習問題 N (Exercise N)` で 116–128 |
+| 4. 明らかな誤訳・欠落・プレースホルダ | **軽微〜中が少数** | プレースホルダ 0。旧指摘（やり取り領域 / ステッパ / 検査付き版 / 定義上誤り）は現行にない。中 1 件は L491 |
 
-主張: Issue #25 が差し戻し条件にしている「省略」と「フェンス改変」は、現行草稿にはない。
-根拠: 下記「検証方法」の機械照合と、JA/EN の通読。
-論拠: 完了条件のハードゲートは通っている。残件は学習用の用語併記であり、再下訳や差し戻しの理由にならない。
-
-前回のローカル検証（`docs/hermes-check-i1-local.md`）は `d96c161` 時点で **要修正** とした。その後の `85cbce4` で指摘した用語・誤読は本文に入っている。本 live は **その後の HEAD** を独立に測った結果である。
-
----
-
-## 検証方法
-
-1. フェンス抽出（`` ```lang\n...\n``` ``）を JA/EN で対にし、本文・言語タグを比較。連結バイト列の SHA256 も比較。
-2. `##` / `###`、`Exercise` / `練習問題`、`Figure` / `図`、blockquote Note、番号付き項目、箇条書き行数を列挙。
-3. フェンスを除いた散文の段落数、プレースホルダ検索、英語 3 語以上の連続。
-4. Exercise 116–128 の番号付き式を空白除去して EN と突合。
-5. JA を通読し、EN 各節の論点（法則名・Note・図・テスト形式）が落ちていないかを確認。agy の出力は開いていない。
-
----
-
-## 1. 省略チェック（合格）
-
-### 見出し対応（抜けなし）
+### 見出し対応
 
 | EN | JA |
 |---|---|
@@ -56,163 +44,109 @@
 | BSL Tests | BSL のテスト (BSL Tests) |
 | BSL Error Messages | BSL のエラーメッセージ (BSL Error Messages) |
 
-Error Messages の 5 サブ見出しも JA にある。
-
-- Function Applications in BSL（L845）
-- Wrong Data in BSL（L904）
-- Conditionals in BSL（L934）
-- Function Definitions in BSL（L980）
-- Structure Type Definitions in BSL（L1029）
+Error Messages の italic サブ見出し 5 も双语で残っている。
 
 ### 節ごとのフェンス数（JA = EN）
 
-| 節 | EN フェンス | JA フェンス |
-|---|---|---|
-| Vocabulary | 1 | 1 |
-| Grammar | 5 | 5 |
-| Meaning | 11 | 11 |
-| Meaning and Computing | 0 | 0 |
-| Errors | 11 | 11 |
-| Boolean | 4 | 4 |
-| Constants | 9 | 9 |
-| Structures | 11 | 11 |
-| Tests | 2 | 2 |
-| Error Messages | 22 | 22 |
-| **計** | **76** | **76** |
-
-フェンスを除いた段落数は EN 258 / JA 259。JA が 1 多いのは末尾の **免責**（EN にない追加。リポジトリ方針。省略ではない）。
+| 節 | フェンス |
+|---|---|
+| Vocabulary | 1 |
+| Grammar | 5 |
+| Meaning | 11 |
+| Meaning and Computing | 0 |
+| Errors | 11 |
+| Boolean | 4 |
+| Constants | 9 |
+| Structures | 11 |
+| Tests | 2 |
+| Error Messages | 22 |
+| 合計 | 76 |
 
 ### Exercise 116–128
 
-すべて本文にあり、番号付き項目数は EN と一致する。フェンス外のインライン式は、抽出 EN が HTML 由来で空白潰れ（例: `(=yz)`）しているのに対し、JA は学習可能な BSL として空白を戻している（`(= y z)`）。空白除去後は 116–128 の全項目が一致。フェンス内の式は潰れたままの EN を複製している。
-
-| # | JA 行付近 | 項目数 JA/EN | フェンス JA/EN |
+| N | EN 形式 | JA | 項目 |
 |---|---|---|---|
-| 116 | 125 | 3/3 | 0/0 |
-| 117 | 133 | 3/3 | 0/0 |
-| 118 | 141 | 3/3 | 0/0 |
-| 119 | 149 | 2/2 | 0/0 |
-| 120 | 156 | 3/3 | 0/0 |
-| 121 | 310 | 3/3 | 0/0 |
-| 122 | 318 | 3/3 | 1/1 |
-| 123 | 512 | 0/0（if 形はフェンス） | 1/1 |
-| 124 | 578 | 0/0（プログラム3本はフェンス） | 3/3 |
-| 125 | 691 | 3/3 | 0/0 |
-| 126 | 699 | 5/5 | 1/1 |
-| 127 | 714 | 5/5 | 1/1（本体。直後の Figure 43 は次節導入） |
-| 128 | 802 | 0/0（テストはフェンス） | 1/1 |
+| 116 | 合法な式 3 | あり | 3 |
+| 117 | 非合法な式 3 | あり | 3 |
+| 118 | 合法な定義 3 | あり | 3 |
+| 119 | 非合法な定義 2 | あり | 2 |
+| 120 | 合法/非合法の判別 3 | あり | 3 |
+| 121 | ステップ評価 3 + ステッパー | あり | 3 |
+| 122 | 定義 + 式 3 + ステッパー | あり | 3 |
+| 123 | `if` → `cond` 規則（フェンス 1） | あり（指示をフェンス前に吸収） | フェンス 1 |
+| 124 | プログラム 3 + ステッパー | あり | フェンス 3 |
+| 125 | define-struct 3 | あり | 3 |
+| 126 | 値の特定 5 | あり | 5 |
+| 127 | 評価予測 5 + 対話領域/ステッパー | あり | 5 |
+| 128 | 失敗テスト フェンス 1 | あり | フェンス 1 |
 
-### Figure / Note / リスト
+`docs/hermes-review-i1.md` が旧草稿（~7KB）に対して挙げた欠落（Contents、Note、Figure 39–43、Ex 116–128、Error Messages 本文）は、現行 JA では解消済み。
 
-- Figure 39–43: キャプション（フェンス内・英語のまま）と本文の「図N」参照の両方がある。
-- EN blockquote `> **Note:**` 10、JA `> **注 (Note):**` 10。
-- Grammar の DrRacket 2 部分 Note がリスト内と直後で重複しているのは **EN 抽出側の重複の写し**。JA の独自欠落/増補ではない。
-- 箇条書き・番号リスト行: EN 52 / JA 52。番号付き項目: 36/36。
-- 導入の Contents 10 項目、キーワード説明、合法/非合法例、beta / condfalse / condtrue、stuck、短絡、check-* 7 種、Error Messages 各表: 通読で落ちを見ていない。
+## 1. 省略（詳細）
 
-### 通読で確認した論点（落ちなし）
+空行分割の段落数は Boolean 以外ほぼ一致。
 
-- 導入: Fixed-Size Data のたとえ、syntax/semantics、cat/brick 例文、Note（設計原理の補完）
-- Vocabulary: 語彙の3種、図39、集合は列挙で定義
-- Grammar: `=`/`|`/`...` の読み方、define の 0/1/2 繰り返し例、キーワード、42 が文である推論、複合文、非合法3例、空白とスタイル、Ex 116–120、文法用語（header/body/left-hand side/actual arguments）
-- Meaning: 算術・Boolean/string 法則、図42、beta、poly 例、cond 規則、Ex 121–122
-- Meaning and Computing: ステッパー＝プレ代数の生徒、model、Computing 節の練習、刈り込み
-- Errors: 構文 vs 実行時、`(/ 1 0)`、stuck、my-divide の網掛け、最も外側かつ左、checked-area-of-disk
-- Boolean: 文法拡張、pragmatics/短絡、and/or の cond 省略、Ex 123
-- Constants: `(define name expr)`、RADIUS/DIAMETER、AREA-OF-RADIUS 順、入れ替えエラー、Ex 124
-- Structures: 合法/非合法 define-struct、コンストラクタ/セレクタ/述語、値の宇宙の拡張、等式、Ex 125–127、図43
-- Tests: RUN で末尾へ移動、check-* 成功例、Ex 128（失敗するテスト）
-- Error Messages: 3 部構成の説明、最悪例（`<`）、5 分類の表
+- Boolean: EN 18 / JA 17。差は練習問題 123。EN はフェンス後に独立文 `as a cond expression.` がある。JA は「次を `cond` 式に書き換えられることを示す規則を書きなさい」へ吸収。課題内容は落ちていない。
+- Error Messages: EN 40 / JA 42。差は JA 末尾の `---` と免責（追加であり省略ではない）。
+- リスト行: 番号付き 36/36、`-` 16/16。
+- blockquote 行: EN 20 / JA 18。差は同一引用の改行（指針 2 行→1 行、値の定義 3 行→2 行）であり、Note の欠落ではない。
+- Grammar の DrRacket Note（定義領域／対話領域）は EN 抽出が二重。JA も二重のまま。省略ではない。
+- 通読で確認した論点: 導入 3 段落、Vocabulary 図後、Grammar のキーワード／合法例／非合法例、Meaning の beta / condfalse / condtrue、Computing のステッパー 3 段落、Errors の stuck / 最左最外指針 / `error`、Boolean の and/or 短絡と同値、Constants の定義順エラー、Structures の constructor/selector/predicate、Tests の RUN 移動、Error Messages 導入と 5 区分。いずれも対応段落あり。
 
----
+## 2. コードフェンス
 
-## 2. コードフェンス（合格）
+- 抽出: 正規表現 `` ```([^\n]*)\n(.*?)``` ``（DOTALL）。
+- 各フェンスを順に比較し、言語タグ＋本文の差分 0。
+- 連結 SHA256（各フェンスを `lang + "\n" + body` として連結）:
+  `8cd49e9abd41f2f02da91764125106cd3d9c1f6d22ad408313da1b0766b695a4`
+  （JA = EN）。
 
-| 項目 | 値 |
-|---|---|
-| EN フェンス数 | 76 |
-| JA フェンス数 | 76 |
-| 対の本文不一致 | **0** |
-| 言語タグ不一致 | **0**（`racket` 50、空 26。順序も同一） |
-| フェンス全体（開始行含む）SHA256 | `5ce411a87c168969db86746194925e40fcf80cb2b3555594fe56adf6fa1d2ad1`（JA = EN） |
+必須ルール 2 の対象はフェンス内のみ。フェンス外の番号付き式は EN 抽出で空白が潰れている（例: `(=yz)`、`(define(fx)x)`）。JA は空白復元＋バッククォート。学習用としては原本に近い。フェンスには触っていない。
 
-主張: フェンス内は英語原本と一字一句一致する（コメント含む）。
-根拠: 76 対すべて `lang` と `body` が等しく、連結 SHA256 も一致。
-論拠: Issue #25 の「不一致は差し戻し」条件は発火しない。
+Error Messages 表の右列説明は英語のまま。フェンス一致規則のため翻訳禁止。EN 抽出時点で既に省略記号付き。
 
----
+## 問題リスト
 
-## 3. 誤訳・英語混在・プレースホルダ
+重大度: 重大 = 差し戻し（省略またはフェンス不一致） / 中 = 意味の歪みでマージ前に直したいが落ちではない / 軽微 = 任意 / 情報 = 落ちではない観測。
 
-プレースホルダ（TODO / FIXME / XXX / 未訳 / 仮訳 / TBD / WIP / PLACEHOLDER）: **0 件**。
+| ID | 重大度 | 場所 | 問題 | 修正提案 |
+|----|--------|------|------|----------|
+| P1 | 中 | JA 491 / EN 667–668 | EN “we don’t wish to divide by 0 accidentally” を「たまたま 0 で割りたくない」。accidentally は偶然ではなく「誤って 0 除算しない」。 | 「誤って 0 で割らないため」 |
+| P2 | 軽微 | JA 512–516 / EN 702–713（練習問題 123） | フェンス後の独立文をフェンス前に吸収。意味は落ちていない。 | 任意: フェンス後に「を `cond` 式として。」を残す |
+| P3 | 軽微 | JA 484 | `語用論` に英語併記 `(pragmatics)` がない。構文 / 意味論は初出で併記あり。 | 任意: `語用論 (pragmatics)` |
+| P4 | 軽微 | JA 4 章タイトル | 推奨形式は「日本語 (English)」。現行は English 先行・全角括弧。節見出しは推奨形式。 | 任意 |
+| P5 | 軽微 | JA 19, 21 | EN `Fixed-Size Data` を「第I部「固定サイズのデータ」」。同ファイル内の `入力エラー (Input Errors)` 等は英語併記あり。導入だけ英語核が無い。 | 任意 |
+| P6 | 軽微 | JA 484 | “BSL-defined functions” → 「BSL 定義の関数」。読みにくい。 | 任意: 「BSL で定義された関数」 |
+| P7 | 軽微 | JA 536 | “proper expression” → 「きちんとした式」。リテラルでない計算式の意。 | 任意: 「通常の式」または「リテラルでない式」 |
+| P8 | 軽微 | JA 512 | “in another way” → 「別の意味で」。仕方／点のずれ。 | 任意: 「別の点で」 |
+| I1 | 情報 | JA 1066–1068 | JA のみ `---` と免責。省略ではなく追加。 | 触らない |
+| I2 | 情報 | フェンス外の番号付き式 | EN 抽出の空白潰れを JA が復元。フェンス要件の対象外。 | 変更しない（推奨） |
+| I3 | 情報 | Grammar の DrRacket Note | EN 抽出の二重を JA も保持。 | 原本 HTML 確認は範囲外 |
+| I4 | 情報 | Error Messages 表 | 右列は英語のまま（フェンス）。 | 触らない |
 
-### 重大
+重大: **0 件**。
 
-なし。
+プレースホルダ（TODO / FIXME / TBD / XXX / 未訳 / `[訳`）: 0。
 
-### 軽微
+残っている英語は次のみ（未訳段落ではない）:
 
-1. **語用論**（JA L484）  
-   EN `pragmatics`。言語学用語としては正しい。本書の syntax/semantics と並べるなら `語用論 (pragmatics)` と併記した方が Vocabulary 節の用語注と揃う。落ちではない。マージ阻止にしない。
+- 見出し・練習番号の英語併記
+- 書籍内参照: `Computing with lambda`、`Refining Interpreters`、`Nameless Functions`、`Input Errors`（日本語併記あり）
+- DrRacket 引用 `"this function is not defined"` とフェンス内 UI
+- 文法 blockquote（`definition = ... | (define name expr)` など）
+- 英語の例文 `"the cat is round"` / `"the brick is a car"`（言語例として原文保持）
 
-2. **フェンス外インラインコードの空白復元**  
-   抽出 EN は `(=yz)`、`(fdefine)`、`(poly35)` のように空白が潰れている。JA の練習問題本文は空白あり。フェンス内は EN どおり。#25 の必須条件外。学習用としては妥当。
+## 総合
 
-3. **末尾免責**  
-   EN にない追加。README 方針と一致。省略ではない。
+- ハードゲート: **合格**
+- 総合: **合格**（P1 は任意〜推奨。全文差し戻しではない）
+- `04-intermezzo1.md` の修正: 本検証ではしていない
+- git commit / push / マージ: しない（ユーザー承認待ち、rebase-and-merge）
 
-### `85cbce4` で解消済み（本 live で再確認）
+## 検証コマンド（再実行用）
 
-前回 `docs/hermes-check-i1-local.md` の P1–P4。現行ファイルでの出現:
+Python 3 で JA/EN を読み、`` ``` `` フェンス 76 本の言語タグ＋本文を逐次比較。Exercise は EN `**Exercise N.` と JA `**練習問題 N (Exercise N).` で 116–128 を抽出。リストはフェンス除去後の `^[-*]|\\d+\\.`。
 
-| 語 | 回数 |
-|---|---|
-| やり取り | 0 |
-| 対話領域 | 3 |
-| 対話ウィンドウ | 1 |
-| ステッパ（「ステッパー」を除く独立形） | 0（「ステッパー」12） |
-| 検査付き | 0 |
-| チェック付き | 1 |
-| 定義上 | 0 |
-| `this function is not defined`（L576、英語原文＋和訳） | あり |
+## フォローアップ（校正github-chan, 2026-09-17）
 
-Error Messages 冒頭は「誤りを犯すのが当たり前の初心者向け」になっており、定義フォームとの誤読は残っていない。
-
-### 英語混在のうち許容するもの
-
-- 見出しの `(English)` 併記（#25 推奨形式）
-- フェンス内のすべて（一致済み）
-- 英語の例文（`the cat is round` / `the brick is a car`）
-- 識別子・キーワード（`cond`、`define-struct`、`check-expect` 等）
-- DrRacket が出す英語メッセージ（表フェンスおよび L576 の引用）
-
----
-
-## 注記（不合格にしない）
-
-- **原文の重複 Note**: Grammar の DrRacket 2 部分 Note は EN L164–166 と L170–172 で重複。JA L106 と L109 も重複。抽出アーティファクト。
-- **原文の節番号の言い回し**: 導入の「4つ目の節でエラー」「最後の節でテスト」は EN も同じで、実際の `##` 順（Meaning and Computing が 4 番目、Tests は Error Messages の直前）とずれる。JA の責任ではない。
-- **旧ギャップ分析**: `docs/hermes-review-i1.md` の欠落リスト（Ex 116–128、Figure、Error Messages 本文）は **現行草稿では解消済み**。あのファイルは薄い要約時点のスナップショット。
-- **`docs/hermes-check-i1-draft.md`**: フェンス 76 一致・Ex 全収録は再確認できた。同ファイルの「41056 bytes」は文字数でありバイト数ではない（当時の文字数。現行は 41154 文字 / 59796 bytes）。
-
----
-
-## 既存レポートとの差分
-
-| | `hermes-check-i1-draft.md` | `hermes-check-i1-local.md` | **本ファイル（live）** |
-|---|---|---|---|
-| 経路 | 実行エージェント（sand-box） | ローカル Hermes @ 用語修正前 | ローカル Hermes @ `85cbce4` |
-| フェンス 76 一致 | YES | YES | YES（SHA256 再計測） |
-| Exercise | 全収録 | 全収録 | 全収録＋空白正規化突合 |
-| 用語 | 意訳の語感とだけ | P1–P4 を要修正 | P1–P4 は解消。残は軽微 |
-| 判定 | 統合可 | 要修正 | **合格（軽微のみ）** |
-
----
-
-## 結論（Claim / Evidence / Warrant）
-
-主張: 現行の Intermezzo 1 草稿（`04-intermezzo1.md` @ `85cbce4`）は、省略なし・フェンス一致という #25 の完了条件を満たす。agy は使っていない。マージを止める落ち・フェンス改変はない。
-
-根拠: フェンス 76 対 SHA256 `5ce411a8…` が JA=EN。見出し 12。Exercise 116–128。Note 10。リスト行 52。番号項目 36。通読で節の論点が対応。前回の用語指摘は `85cbce4` で消えている。
-
-論拠: #25 は agy を信じず省略とコード改変を見るためのイシューである。その観点では差し戻し理由はない。残る語用論の英語併記は任意。rebase-and-merge はユーザー承認待ちのまま（本検証ではマージしない）。
+ThinkPad 上の live 検証後、P1（accidentally）を「誤って 0 で割らないため」に修正。あわせて P3（語用論 (pragmatics)）と P6（BSL で定義された関数）も適用。フェンスは未変更。commit / マージはユーザー確認待ち。
