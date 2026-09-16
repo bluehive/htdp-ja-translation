@@ -14,3 +14,5 @@ Issue #25 / #16 向け作業指示です。
 結果を docs/hermes-review-i1.md に書き、可能なら gh で issue #25 にコメントしてください。
 注意: agy の下訳は無検証で信じないこと。コードフェンスは EN と完全一致。省略禁止。
 ---
+=== retry hermes (expect fail) ===
+--: line 68: /home/mevius/.local/bin/hermes: No such file or directory
