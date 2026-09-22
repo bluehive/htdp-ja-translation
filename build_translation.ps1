@@ -19,10 +19,13 @@ $PandocPath = "pandoc" # Or full path, e.g. "C:\Program Files\Pandoc\pandoc.exe"
 $PdfEngine = "typst" # PDF engine to use: typst, lualatex, xelatex, etc.
 $FontName = "BIZ UDMincho" # Font name for Japanese PDF rendering (standard on Win 10/11: BIZ UDMincho, MS Mincho, etc.)
 
+# Date stamp (yy-mm-dd) added to the artifact file names. Override with $env:DATE_STAMP.
+$DateStamp = if ($env:DATE_STAMP) { $env:DATE_STAMP } else { Get-Date -Format "yy-MM-dd" }
+
 $BuildDir = Join-Path $PSScriptRoot "build"
 $TempMd = Join-Path $BuildDir "htdp2e-ja-combined.md"
-$OutEpub = Join-Path $PSScriptRoot "htdp2e-ja.epub"
-$OutPdf = Join-Path $PSScriptRoot "htdp2e-ja.pdf"
+$OutEpub = Join-Path $PSScriptRoot "htdp2e-ja-$DateStamp.epub"
+$OutPdf = Join-Path $PSScriptRoot "htdp2e-ja-$DateStamp.pdf"
 $ExtractedDir = Join-Path $PSScriptRoot "extracted"
 
 Write-Host "=== Translation pipeline reminder ===" -ForegroundColor Cyan
