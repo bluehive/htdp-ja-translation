@@ -12,6 +12,9 @@ if [[ "${1:-}" == "--no-gdrive" ]]; then
   COPY_GDRIVE=0
 fi
 
+# 成果物のファイル名に付ける日付 (yy-mm-dd)。環境変数 DATE_STAMP で上書き可。
+DATE_STAMP="${DATE_STAMP:-$(date +%y-%m-%d)}"
+
 if [[ -x "/home/mevius/my-project/mypublish-books/tools/pandoc-3.6.4/bin/pandoc" ]]; then
   PANDOC="/home/mevius/my-project/mypublish-books/tools/pandoc-3.6.4/bin/pandoc"
 elif command -v pandoc >/dev/null 2>&1; then
@@ -25,8 +28,8 @@ BUILD_DIR="$ROOT/build"
 mkdir -p "$BUILD_DIR"
 TEMP_MD="$BUILD_DIR/htdp2e-ja-combined.md"
 LOCK="$BUILD_DIR/build.lock"
-OUT_EPUB="$ROOT/htdp2e-ja.epub"
-OUT_PDF="$ROOT/htdp2e-ja.pdf"
+OUT_EPUB="$ROOT/htdp2e-ja-$DATE_STAMP.epub"
+OUT_PDF="$ROOT/htdp2e-ja-$DATE_STAMP.pdf"
 LUA="$ROOT/tools/pagebreak.lua"
 CSS="$ROOT/tools/epub.css"
 COMBINE="$ROOT/tools/combine_book.py"
@@ -45,6 +48,7 @@ fi
 echo "=== HTDP JA build (see BUILD.md) ==="
 echo "  Pandoc: $PANDOC ($("$PANDOC" --version | head -n1))"
 echo "  Font:   $FONT_SANS / $FONT_MONO"
+echo "  Date:   $DATE_STAMP (成果物のファイル名に付与)"
 
 echo "=== 1. Combining: 本文 → 付録 ==="
 python3 "$COMBINE" "$TEMP_MD"
@@ -111,7 +115,7 @@ if [[ "$COPY_GDRIVE" -eq 1 ]]; then
   if [[ -d "$GDRIVE_DIR" ]]; then
     echo "=== 4. Copy to $GDRIVE_DIR ==="
     cp -f "$OUT_EPUB" "$OUT_PDF" "$GDRIVE_DIR/"
-    ls -lh "$GDRIVE_DIR/htdp2e-ja.epub" "$GDRIVE_DIR/htdp2e-ja.pdf"
+    ls -lh "$GDRIVE_DIR/$(basename "$OUT_EPUB")" "$GDRIVE_DIR/$(basename "$OUT_PDF")"
   else
     echo "WARNING: $GDRIVE_DIR not mounted; skip copy." >&2
   fi

@@ -34,7 +34,7 @@ extracted/appendix/<manual>/original_markdown_**.md
 | 2a | **`extracted/original_markdown_**.md`** | **本体の翻訳原本（正本）** |
 | 2b | **`extracted/appendix/<manual>/original_markdown_**.md`** | **付録の翻訳原本（正本）** |
 | 3 | ルートの `??-*.md`（＋将来の付録日本語ドラフト） | 日本語翻訳ドラフト |
-| 4 | `htdp2e-ja.epub` / `htdp2e-ja.pdf` | ビルド成果物 |
+| 4 | `htdp2e-ja-<yy-mm-dd>.epub` / `htdp2e-ja-<yy-mm-dd>.pdf` | ビルド成果物（ファイル名にビルド日。例: `htdp2e-ja-26-09-22.pdf`） |
 
 * 翻訳するときは **HTML を直接読まず**、`original_markdown_**.md` をソースにする。
 * コードブロックは原文と完全一致を保つ。
@@ -107,9 +107,11 @@ EPUB / PDF の**順番・改ページ・Noto ゴシック**は [BUILD.md](BUILD.
 .\build_translation.ps1
 ```
 
-実行後、ルートに次が生成されます（環境により PDF エンジンが異なる場合があります）:
-* **EPUB**: `htdp2e-ja.epub`
-* **PDF**: `htdp2e-ja.pdf`
+実行後、ルートに次が生成されます（環境により PDF エンジンが異なる場合があります）。
+ファイル名にはビルド日 `<yy-mm-dd>` が付きます（例: 2026-09-22 のビルド → `htdp2e-ja-26-09-22.pdf`）:
+* **EPUB**: `htdp2e-ja-<yy-mm-dd>.epub`
+* **PDF**: `htdp2e-ja-<yy-mm-dd>.pdf`
+* 既定で `~/GoogleDrive/` にも同じファイル名でコピーされます（`--no-gdrive` で抑止）
 
 > ビルド対象はルートの日本語訳 `??-*.md` です。`extracted/original_markdown_**.md` は英語原本であり、EPUB/PDF には直接含めません。
 

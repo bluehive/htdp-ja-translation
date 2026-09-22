@@ -20,10 +20,11 @@
    - 本文・見出し: `Noto Sans CJK JP`
    - コード: `Noto Sans Mono CJK JP`
 5. **結合は原子的に**（一時ファイルへ書いてから置き換え）。二重起動は flock で落とす
-6. **成果物**
-   - `htdp2e-ja.epub`
-   - `htdp2e-ja.pdf`
+6. **成果物**（ファイル名にビルド日 `<yy-mm-dd>` を付ける。例: `htdp2e-ja-26-09-22.pdf`）
+   - `htdp2e-ja-<yy-mm-dd>.epub`
+   - `htdp2e-ja-<yy-mm-dd>.pdf`
    - 手元の Google Drive ルートへコピー: `~/GoogleDrive/`（`~/googledrive` と同じ）
+   - 日付は `date +%y-%m-%d`。環境変数 `DATE_STAMP`（.sh）/ `$env:DATE_STAMP`（.ps1）で上書き可
 
 ## コマンド
 
